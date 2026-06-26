@@ -4,6 +4,7 @@
 
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import '../../core/theme/app_theme.dart';
@@ -22,7 +23,7 @@ class UserProfile {
   final String semester;
   final String city;
   final String state;
-  final DateTime? createdAt;    // Future: sync
+  final DateTime? createdAt; // Future: sync
   final DateTime? updatedAt;
 
   const UserProfile({
@@ -65,41 +66,41 @@ class UserProfile {
     DateTime? updatedAt,
   }) =>
       UserProfile(
-        id:           id,
-        fullName:     fullName     ?? this.fullName,
-        email:        email        ?? this.email,
+        id: id,
+        fullName: fullName ?? this.fullName,
+        email: email ?? this.email,
         mobileNumber: mobileNumber ?? this.mobileNumber,
-        college:      college      ?? this.college,
-        course:       course       ?? this.course,
-        semester:     semester     ?? this.semester,
-        city:         city         ?? this.city,
-        state:        state        ?? this.state,
-        createdAt:    createdAt,
-        updatedAt:    updatedAt    ?? this.updatedAt,
+        college: college ?? this.college,
+        course: course ?? this.course,
+        semester: semester ?? this.semester,
+        city: city ?? this.city,
+        state: state ?? this.state,
+        createdAt: createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
       );
 
   factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
-        id:           json['id']             as String,
-        fullName:     json['full_name']      as String,
-        email:        json['email']          as String,
-        mobileNumber: json['mobile_number']  as String,
-        college:      json['college']        as String,
-        course:       json['course']         as String,
-        semester:     json['semester']       as String,
-        city:         json['city']           as String,
-        state:        json['state']          as String,
+        id: json['id'] as String,
+        fullName: json['full_name'] as String,
+        email: json['email'] as String,
+        mobileNumber: json['mobile_number'] as String,
+        college: json['college'] as String,
+        course: json['course'] as String,
+        semester: json['semester'] as String,
+        city: json['city'] as String,
+        state: json['state'] as String,
       );
 
   Map<String, dynamic> toJson() => {
-        'id':            id,
-        'full_name':     fullName,
-        'email':         email,
+        'id': id,
+        'full_name': fullName,
+        'email': email,
         'mobile_number': mobileNumber,
-        'college':       college,
-        'course':        course,
-        'semester':      semester,
-        'city':          city,
-        'state':         state,
+        'college': college,
+        'course': course,
+        'semester': semester,
+        'city': city,
+        'state': state,
       };
 }
 
@@ -109,15 +110,15 @@ class UserProfile {
 
 abstract final class MockProfileData {
   static const UserProfile profile = UserProfile(
-    id:           'user_001',
-    fullName:     'Arjun Sharma',
-    email:        'arjun.sharma@gmail.com',
+    id: 'user_001',
+    fullName: 'Arjun Sharma',
+    email: 'arjun.sharma@gmail.com',
     mobileNumber: '+91 98765 43210',
-    college:      'National Law School of India University',
-    course:       'BALLB (Hons.)',
-    semester:     '3rd Semester',
-    city:         'Bengaluru',
-    state:        'Karnataka',
+    college: 'National Law School of India University',
+    course: 'BALLB (Hons.)',
+    semester: '3rd Semester',
+    city: 'Bengaluru',
+    state: 'Karnataka',
   );
 }
 
@@ -127,27 +128,68 @@ abstract final class MockProfileData {
 
 abstract final class _PickerOptions {
   static const List<String> courses = [
-    'BALLB (Hons.)', 'BALLB', 'BA LLB', 'BBA LLB',
-    'BCom LLB', 'BSc LLB', 'LLB (3-Year)', 'LLM',
-    'LLD', 'PhD (Law)', 'Diploma in Law', 'Other',
+    'BALLB (Hons.)',
+    'BALLB',
+    'BA LLB',
+    'BBA LLB',
+    'BCom LLB',
+    'BSc LLB',
+    'LLB (3-Year)',
+    'LLM',
+    'LLD',
+    'PhD (Law)',
+    'Diploma in Law',
+    'Other',
   ];
 
   static const List<String> semesters = [
-    '1st Semester', '2nd Semester', '3rd Semester', '4th Semester',
-    '5th Semester', '6th Semester', '7th Semester', '8th Semester',
-    '9th Semester', '10th Semester',
+    '1st Semester',
+    '2nd Semester',
+    '3rd Semester',
+    '4th Semester',
+    '5th Semester',
+    '6th Semester',
+    '7th Semester',
+    '8th Semester',
+    '9th Semester',
+    '10th Semester',
   ];
 
   static const List<String> states = [
-    'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar',
-    'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana',
-    'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala',
-    'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya',
-    'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan',
-    'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura',
-    'Uttar Pradesh', 'Uttarakhand', 'West Bengal',
-    'Delhi', 'Jammu & Kashmir', 'Ladakh',
-    'Chandigarh', 'Puducherry', 'Other',
+    'Andhra Pradesh',
+    'Arunachal Pradesh',
+    'Assam',
+    'Bihar',
+    'Chhattisgarh',
+    'Goa',
+    'Gujarat',
+    'Haryana',
+    'Himachal Pradesh',
+    'Jharkhand',
+    'Karnataka',
+    'Kerala',
+    'Madhya Pradesh',
+    'Maharashtra',
+    'Manipur',
+    'Meghalaya',
+    'Mizoram',
+    'Nagaland',
+    'Odisha',
+    'Punjab',
+    'Rajasthan',
+    'Sikkim',
+    'Tamil Nadu',
+    'Telangana',
+    'Tripura',
+    'Uttar Pradesh',
+    'Uttarakhand',
+    'West Bengal',
+    'Delhi',
+    'Jammu & Kashmir',
+    'Ladakh',
+    'Chandigarh',
+    'Puducherry',
+    'Other',
   ];
 }
 
@@ -166,7 +208,6 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen>
     with TickerProviderStateMixin {
-
   // ── Data ──────────────────────────────────────
   late UserProfile _originalProfile;
 
@@ -184,28 +225,28 @@ class _ProfileScreenState extends State<ProfileScreen>
   late final FocusNode _cityFocus;
 
   // ── Picker state ──────────────────────────────
-  String _selectedCourse   = '';
+  String _selectedCourse = '';
   String _selectedSemester = '';
-  String _selectedState    = '';
+  String _selectedState = '';
 
   // ── UI state ──────────────────────────────────
-  bool _hasChanges     = false;
-  bool _isSaving       = false;
-  bool _nameFocused    = false;
-  bool _emailFocused   = false;
-  bool _mobileFocused  = false;
+  bool _hasChanges = false;
+  bool _isSaving = false;
+  bool _nameFocused = false;
+  bool _emailFocused = false;
+  bool _mobileFocused = false;
   bool _collegeFocused = false;
-  bool _cityFocused    = false;
+  bool _cityFocused = false;
 
   // ── Animations ────────────────────────────────
   late AnimationController _entranceController;
   late AnimationController _saveController;
-  late Animation<double>   _avatarFade;
-  late Animation<Offset>   _avatarSlide;
-  late Animation<double>   _formFade;
-  late Animation<Offset>   _formSlide;
-  late Animation<double>   _buttonsFade;
-  late Animation<double>   _saveScale;
+  late Animation<double> _avatarFade;
+  late Animation<Offset> _avatarSlide;
+  late Animation<double> _formFade;
+  late Animation<Offset> _formSlide;
+  late Animation<double> _buttonsFade;
+  late Animation<double> _saveScale;
 
   // ─────────────────────────────────────────────
   // MARK: — LIFECYCLE
@@ -222,25 +263,35 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   void _initControllers() {
     final p = _originalProfile;
-    _nameController    = TextEditingController(text: p.fullName);
-    _emailController   = TextEditingController(text: p.email);
-    _mobileController  = TextEditingController(text: p.mobileNumber);
+    _nameController = TextEditingController(text: p.fullName);
+    _emailController = TextEditingController(text: p.email);
+    _mobileController = TextEditingController(text: p.mobileNumber);
     _collegeController = TextEditingController(text: p.college);
-    _cityController    = TextEditingController(text: p.city);
+    _cityController = TextEditingController(text: p.city);
 
-    _selectedCourse   = p.course;
+    _selectedCourse = p.course;
     _selectedSemester = p.semester;
-    _selectedState    = p.state;
+    _selectedState = p.state;
 
-    _nameFocus    = FocusNode()..addListener(() => setState(() => _nameFocused    = _nameFocus.hasFocus));
-    _emailFocus   = FocusNode()..addListener(() => setState(() => _emailFocused   = _emailFocus.hasFocus));
-    _mobileFocus  = FocusNode()..addListener(() => setState(() => _mobileFocused  = _mobileFocus.hasFocus));
-    _collegeFocus = FocusNode()..addListener(() => setState(() => _collegeFocused = _collegeFocus.hasFocus));
-    _cityFocus    = FocusNode()..addListener(() => setState(() => _cityFocused    = _cityFocus.hasFocus));
+    _nameFocus = FocusNode()
+      ..addListener(() => setState(() => _nameFocused = _nameFocus.hasFocus));
+    _emailFocus = FocusNode()
+      ..addListener(() => setState(() => _emailFocused = _emailFocus.hasFocus));
+    _mobileFocus = FocusNode()
+      ..addListener(
+          () => setState(() => _mobileFocused = _mobileFocus.hasFocus));
+    _collegeFocus = FocusNode()
+      ..addListener(
+          () => setState(() => _collegeFocused = _collegeFocus.hasFocus));
+    _cityFocus = FocusNode()
+      ..addListener(() => setState(() => _cityFocused = _cityFocus.hasFocus));
 
     for (final c in [
-      _nameController, _emailController, _mobileController,
-      _collegeController, _cityController,
+      _nameController,
+      _emailController,
+      _mobileController,
+      _collegeController,
+      _cityController,
     ]) {
       c.addListener(_checkChanges);
     }
@@ -262,7 +313,8 @@ class _ProfileScreenState extends State<ProfileScreen>
         curve: const Interval(0.00, 0.45, curve: Curves.easeOut),
       ),
     );
-    _avatarSlide = Tween<Offset>(begin: const Offset(0, -0.2), end: Offset.zero).animate(
+    _avatarSlide =
+        Tween<Offset>(begin: const Offset(0, -0.2), end: Offset.zero).animate(
       CurvedAnimation(
         parent: _entranceController,
         curve: const Interval(0.00, 0.50, curve: Curves.easeOutCubic),
@@ -275,7 +327,8 @@ class _ProfileScreenState extends State<ProfileScreen>
         curve: const Interval(0.18, 0.65, curve: Curves.easeOut),
       ),
     );
-    _formSlide = Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero).animate(
+    _formSlide =
+        Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero).animate(
       CurvedAnimation(
         parent: _entranceController,
         curve: const Interval(0.18, 0.70, curve: Curves.easeOutCubic),
@@ -291,11 +344,13 @@ class _ProfileScreenState extends State<ProfileScreen>
 
     _saveScale = TweenSequence<double>([
       TweenSequenceItem(
-        tween: Tween<double>(begin: 1.0, end: 0.94).chain(CurveTween(curve: Curves.easeIn)),
+        tween: Tween<double>(begin: 1.0, end: 0.94)
+            .chain(CurveTween(curve: Curves.easeIn)),
         weight: 40,
       ),
       TweenSequenceItem(
-        tween: Tween<double>(begin: 0.94, end: 1.0).chain(CurveTween(curve: Curves.elasticOut)),
+        tween: Tween<double>(begin: 0.94, end: 1.0)
+            .chain(CurveTween(curve: Curves.elasticOut)),
         weight: 60,
       ),
     ]).animate(_saveController);
@@ -312,12 +367,23 @@ class _ProfileScreenState extends State<ProfileScreen>
     _entranceController.dispose();
     _saveController.dispose();
     for (final c in [
-      _nameController, _emailController, _mobileController,
-      _collegeController, _cityController,
-    ]) { c.dispose(); }
+      _nameController,
+      _emailController,
+      _mobileController,
+      _collegeController,
+      _cityController,
+    ]) {
+      c.dispose();
+    }
     for (final f in [
-      _nameFocus, _emailFocus, _mobileFocus, _collegeFocus, _cityFocus,
-    ]) { f.dispose(); }
+      _nameFocus,
+      _emailFocus,
+      _mobileFocus,
+      _collegeFocus,
+      _cityFocus,
+    ]) {
+      f.dispose();
+    }
     super.dispose();
   }
 
@@ -327,14 +393,14 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   void _checkChanges() {
     final p = _originalProfile;
-    final changed = _nameController.text    != p.fullName
-        || _emailController.text            != p.email
-        || _mobileController.text           != p.mobileNumber
-        || _collegeController.text          != p.college
-        || _selectedCourse                  != p.course
-        || _selectedSemester                != p.semester
-        || _cityController.text             != p.city
-        || _selectedState                   != p.state;
+    final changed = _nameController.text != p.fullName ||
+        _emailController.text != p.email ||
+        _mobileController.text != p.mobileNumber ||
+        _collegeController.text != p.college ||
+        _selectedCourse != p.course ||
+        _selectedSemester != p.semester ||
+        _cityController.text != p.city ||
+        _selectedState != p.state;
 
     if (changed != _hasChanges) setState(() => _hasChanges = changed);
   }
@@ -357,21 +423,21 @@ class _ProfileScreenState extends State<ProfileScreen>
     if (!mounted) return;
 
     final updated = _originalProfile.copyWith(
-      fullName:     _nameController.text.trim(),
-      email:        _emailController.text.trim(),
+      fullName: _nameController.text.trim(),
+      email: _emailController.text.trim(),
       mobileNumber: _mobileController.text.trim(),
-      college:      _collegeController.text.trim(),
-      course:       _selectedCourse,
-      semester:     _selectedSemester,
-      city:         _cityController.text.trim(),
-      state:        _selectedState,
-      updatedAt:    DateTime.now(),
+      college: _collegeController.text.trim(),
+      course: _selectedCourse,
+      semester: _selectedSemester,
+      city: _cityController.text.trim(),
+      state: _selectedState,
+      updatedAt: DateTime.now(),
     );
 
     setState(() {
       _originalProfile = updated;
-      _hasChanges      = false;
-      _isSaving        = false;
+      _hasChanges = false;
+      _isSaving = false;
     });
 
     widget.onSaved?.call();
@@ -384,7 +450,10 @@ class _ProfileScreenState extends State<ProfileScreen>
         shape: RoundedRectangleBorder(borderRadius: AppRadius.mdAll),
         duration: const Duration(seconds: 2),
         margin: const EdgeInsets.fromLTRB(
-          AppSpacing.xl, 0, AppSpacing.xl, AppSpacing.xl,
+          AppSpacing.xl,
+          0,
+          AppSpacing.xl,
+          AppSpacing.xl,
         ),
       ),
     );
@@ -395,15 +464,15 @@ class _ProfileScreenState extends State<ProfileScreen>
     HapticFeedback.lightImpact();
     final p = _originalProfile;
     setState(() {
-      _nameController.text    = p.fullName;
-      _emailController.text   = p.email;
-      _mobileController.text  = p.mobileNumber;
+      _nameController.text = p.fullName;
+      _emailController.text = p.email;
+      _mobileController.text = p.mobileNumber;
       _collegeController.text = p.college;
-      _cityController.text    = p.city;
-      _selectedCourse         = p.course;
-      _selectedSemester       = p.semester;
-      _selectedState          = p.state;
-      _hasChanges             = false;
+      _cityController.text = p.city;
+      _selectedCourse = p.course;
+      _selectedSemester = p.semester;
+      _selectedState = p.state;
+      _hasChanges = false;
     });
   }
 
@@ -491,14 +560,15 @@ class _ProfileScreenState extends State<ProfileScreen>
         fit: StackFit.expand,
         children: [
           _ProfileBackground(isDark: dark),
-
           GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
             behavior: HitTestBehavior.translucent,
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               padding: EdgeInsets.only(
-                top: MediaQuery.of(context).padding.top + kToolbarHeight + AppSpacing.base,
+                top: MediaQuery.of(context).padding.top +
+                    kToolbarHeight +
+                    AppSpacing.base,
                 bottom: MediaQuery.of(context).padding.bottom + AppSpacing.max,
               ),
               child: Column(
@@ -552,7 +622,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   isDark: dark,
                                   icon: Icons.person_outline_rounded,
                                   textInputAction: TextInputAction.next,
-                                  onSubmitted: (_) => _emailFocus.requestFocus(),
+                                  onSubmitted: (_) =>
+                                      _emailFocus.requestFocus(),
                                   capitalization: TextCapitalization.words,
                                 ),
                                 _ProfileTextField(
@@ -565,7 +636,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   icon: Icons.mail_outline_rounded,
                                   keyboardType: TextInputType.emailAddress,
                                   textInputAction: TextInputAction.next,
-                                  onSubmitted: (_) => _mobileFocus.requestFocus(),
+                                  onSubmitted: (_) =>
+                                      _mobileFocus.requestFocus(),
                                 ),
                                 _ProfileTextField(
                                   label: 'Mobile Number',
@@ -577,7 +649,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   icon: Icons.phone_outlined,
                                   keyboardType: TextInputType.phone,
                                   textInputAction: TextInputAction.next,
-                                  onSubmitted: (_) => _collegeFocus.requestFocus(),
+                                  onSubmitted: (_) =>
+                                      _collegeFocus.requestFocus(),
                                   isLast: true,
                                 ),
                               ],
@@ -599,7 +672,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   isDark: dark,
                                   icon: Icons.school_outlined,
                                   textInputAction: TextInputAction.done,
-                                  onSubmitted: (_) => FocusScope.of(context).unfocus(),
+                                  onSubmitted: (_) =>
+                                      FocusScope.of(context).unfocus(),
                                   capitalization: TextCapitalization.words,
                                 ),
                                 _ProfilePickerField(
@@ -638,7 +712,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                                   isDark: dark,
                                   icon: Icons.location_city_outlined,
                                   textInputAction: TextInputAction.done,
-                                  onSubmitted: (_) => FocusScope.of(context).unfocus(),
+                                  onSubmitted: (_) =>
+                                      FocusScope.of(context).unfocus(),
                                   capitalization: TextCapitalization.words,
                                 ),
                                 _ProfilePickerField(
@@ -709,7 +784,8 @@ class _ProfileScreenState extends State<ProfileScreen>
               child: Center(
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.sm, vertical: 3,
+                    horizontal: AppSpacing.sm,
+                    vertical: 3,
                   ),
                   decoration: BoxDecoration(
                     color: AppColors.warning.withOpacity(0.15),
@@ -748,7 +824,8 @@ class _UnsavedChangesBanner extends StatelessWidget {
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.base, vertical: AppSpacing.sm,
+            horizontal: AppSpacing.base,
+            vertical: AppSpacing.sm,
           ),
           decoration: BoxDecoration(
             color: AppColors.warning.withOpacity(isDark ? 0.12 : 0.08),
@@ -761,7 +838,8 @@ class _UnsavedChangesBanner extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                width: 7, height: 7,
+                width: 7,
+                height: 7,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: AppColors.warning,
@@ -847,9 +925,11 @@ class _ProfileHeader extends StatelessWidget {
 
             // Edit overlay
             Positioned(
-              right: 0, bottom: 0,
+              right: 0,
+              bottom: 0,
               child: Container(
-                width: 26, height: 26,
+                width: 26,
+                height: 26,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: isDark ? const Color(0xFF2C2C2E) : Colors.white,
@@ -861,7 +941,8 @@ class _ProfileHeader extends StatelessWidget {
                   ],
                 ),
                 child: Icon(
-                  Icons.camera_alt_outlined, size: 13,
+                  Icons.camera_alt_outlined,
+                  size: 13,
                   color: isDark
                       ? AppColors.darkSecondaryText
                       : AppColors.lightSecondaryText,
@@ -877,9 +958,8 @@ class _ProfileHeader extends StatelessWidget {
         Text(
           profile.fullName.isEmpty ? 'Your Name' : profile.fullName,
           style: AppTypography.displaySmall.copyWith(
-            color: isDark
-                ? AppColors.darkPrimaryText
-                : AppColors.lightPrimaryText,
+            color:
+                isDark ? AppColors.darkPrimaryText : AppColors.lightPrimaryText,
             fontFamily: 'Georgia',
             fontWeight: FontWeight.w700,
             letterSpacing: -0.3,
@@ -943,7 +1023,8 @@ class _ProfileSection extends StatelessWidget {
           // Section label
           Padding(
             padding: const EdgeInsets.only(
-              left: AppSpacing.base, bottom: AppSpacing.sm,
+              left: AppSpacing.base,
+              bottom: AppSpacing.sm,
             ),
             child: Text(
               label,
@@ -975,9 +1056,8 @@ class _ProfileSection extends StatelessWidget {
                         : const Color(0x33FFFFFF),
                     width: 0.5,
                   ),
-                  boxShadow: isDark
-                      ? AppShadows.darkGlass
-                      : AppShadows.lightGlass,
+                  boxShadow:
+                      isDark ? AppShadows.darkGlass : AppShadows.lightGlass,
                 ),
                 child: Column(
                   children: [
@@ -1029,23 +1109,26 @@ class _ProfileTextField extends StatelessWidget {
     required this.isFocused,
     required this.isDark,
     required this.icon,
-    this.keyboardType    = TextInputType.text,
+    this.keyboardType = TextInputType.text,
     this.textInputAction = TextInputAction.next,
     this.onSubmitted,
-    this.capitalization  = TextCapitalization.none,
-    this.isLast          = false,
+    this.capitalization = TextCapitalization.none,
+    this.isLast = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final accentColor = isDark ? AppColors.accentLight : AppColors.accent;
-    final iconColor   = isFocused
+    final iconColor = isFocused
         ? accentColor
         : (isDark ? AppColors.darkSecondaryText : AppColors.lightSecondaryText);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(
-        AppSpacing.base, AppSpacing.base, AppSpacing.base, AppSpacing.base,
+        AppSpacing.base,
+        AppSpacing.base,
+        AppSpacing.base,
+        AppSpacing.base,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1082,12 +1165,12 @@ class _ProfileTextField extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 TextField(
-                  controller:       controller,
-                  focusNode:        focusNode,
-                  keyboardType:     keyboardType,
-                  textInputAction:  textInputAction,
+                  controller: controller,
+                  focusNode: focusNode,
+                  keyboardType: keyboardType,
+                  textInputAction: textInputAction,
                   textCapitalization: capitalization,
-                  onSubmitted:      onSubmitted,
+                  onSubmitted: onSubmitted,
                   style: AppTypography.bodySmall.copyWith(
                     fontFamily: null,
                     color: isDark
@@ -1153,23 +1236,37 @@ class _ProfilePickerFieldState extends State<_ProfilePickerField> {
   Widget build(BuildContext context) {
     final hasValue = widget.value.isNotEmpty;
     final textColor = hasValue
-        ? (widget.isDark ? AppColors.darkPrimaryText : AppColors.lightPrimaryText)
-        : (widget.isDark ? AppColors.darkTertiaryText : AppColors.lightTertiaryText);
-    final iconColor =
-        widget.isDark ? AppColors.darkSecondaryText : AppColors.lightSecondaryText;
+        ? (widget.isDark
+            ? AppColors.darkPrimaryText
+            : AppColors.lightPrimaryText)
+        : (widget.isDark
+            ? AppColors.darkTertiaryText
+            : AppColors.lightTertiaryText);
+    final iconColor = widget.isDark
+        ? AppColors.darkSecondaryText
+        : AppColors.lightSecondaryText;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTapDown: (_) => setState(() => _pressed = true),
-      onTapUp:   (_) { setState(() => _pressed = false); widget.onTap(); HapticFeedback.lightImpact(); },
+      onTapUp: (_) {
+        setState(() => _pressed = false);
+        widget.onTap();
+        HapticFeedback.lightImpact();
+      },
       onTapCancel: () => setState(() => _pressed = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 80),
         color: _pressed
-            ? (widget.isDark ? const Color(0x0DFFFFFF) : const Color(0x06000000))
+            ? (widget.isDark
+                ? const Color(0x0DFFFFFF)
+                : const Color(0x06000000))
             : Colors.transparent,
         padding: const EdgeInsets.fromLTRB(
-          AppSpacing.base, AppSpacing.base, AppSpacing.base, AppSpacing.base,
+          AppSpacing.base,
+          AppSpacing.base,
+          AppSpacing.base,
+          AppSpacing.base,
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1184,7 +1281,8 @@ class _ProfilePickerFieldState extends State<_ProfilePickerField> {
                   Text(
                     widget.label,
                     style: AppTypography.caption.copyWith(
-                      color: iconColor, fontSize: 11,
+                      color: iconColor,
+                      fontSize: 11,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -1201,7 +1299,8 @@ class _ProfilePickerFieldState extends State<_ProfilePickerField> {
               ),
             ),
             Icon(
-              Icons.chevron_right_rounded, size: 18,
+              Icons.chevron_right_rounded,
+              size: 18,
               color: widget.isDark
                   ? AppColors.darkTertiaryText
                   : AppColors.lightTertiaryText,
@@ -1243,7 +1342,8 @@ class _PickerSheet extends StatelessWidget {
         Text(
           title,
           style: AppTypography.headlineSmall.copyWith(
-            color: isDark ? AppColors.darkPrimaryText : AppColors.lightPrimaryText,
+            color:
+                isDark ? AppColors.darkPrimaryText : AppColors.lightPrimaryText,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -1267,7 +1367,8 @@ class _PickerSheet extends StatelessWidget {
                             : (isDark
                                 ? AppColors.darkPrimaryText
                                 : AppColors.lightPrimaryText),
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                        fontWeight:
+                            isSelected ? FontWeight.w600 : FontWeight.w400,
                         fontSize: 15,
                       ),
                     ),
@@ -1308,7 +1409,7 @@ class _SaveButton extends StatefulWidget {
 class _SaveButtonState extends State<_SaveButton>
     with SingleTickerProviderStateMixin {
   late AnimationController _press;
-  late Animation<double>   _scale;
+  late Animation<double> _scale;
 
   @override
   void initState() {
@@ -1324,7 +1425,10 @@ class _SaveButtonState extends State<_SaveButton>
   }
 
   @override
-  void dispose() { _press.dispose(); super.dispose(); }
+  void dispose() {
+    _press.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) => ScaleTransition(
@@ -1348,9 +1452,11 @@ class _SaveButtonState extends State<_SaveButton>
                       colors: [AppColors.accentLight, AppColors.accent],
                     )
                   : null,
-              color: widget.hasChanges ? null : (widget.isDark
-                  ? const Color(0x33FFFFFF)
-                  : const Color(0x14000000)),
+              color: widget.hasChanges
+                  ? null
+                  : (widget.isDark
+                      ? const Color(0x33FFFFFF)
+                      : const Color(0x14000000)),
               borderRadius: AppRadius.button,
               boxShadow: widget.hasChanges
                   ? [
@@ -1365,9 +1471,11 @@ class _SaveButtonState extends State<_SaveButton>
             child: Center(
               child: widget.isLoading
                   ? const SizedBox(
-                      width: 20, height: 20,
+                      width: 20,
+                      height: 20,
                       child: CircularProgressIndicator(
-                        strokeWidth: 2, color: Colors.white,
+                        strokeWidth: 2,
+                        color: Colors.white,
                       ),
                     )
                   : Text(
@@ -1416,7 +1524,8 @@ class _ResetButtonState extends State<_ResetButton> {
           duration: const Duration(milliseconds: 80),
           opacity: _pressed ? 0.55 : 1.0,
           child: SizedBox(
-            width: double.infinity, height: 48,
+            width: double.infinity,
+            height: 48,
             child: Center(
               child: Text(
                 'Reset Changes',
@@ -1462,7 +1571,10 @@ class _GlassBackButtonState extends State<_GlassBackButton>
   }
 
   @override
-  void dispose() { _press.dispose(); super.dispose(); }
+  void dispose() {
+    _press.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) => ScaleTransition(
@@ -1476,7 +1588,8 @@ class _GlassBackButtonState extends State<_GlassBackButton>
           },
           onTapCancel: () => _press.reverse(),
           child: Container(
-            width: 34, height: 34,
+            width: 34,
+            height: 34,
             margin: const EdgeInsets.only(left: AppSpacing.sm),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
@@ -1485,7 +1598,8 @@ class _GlassBackButtonState extends State<_GlassBackButton>
                   : const Color(0x1A000000),
             ),
             child: Icon(
-              Icons.arrow_back_ios_rounded, size: 15,
+              Icons.arrow_back_ios_rounded,
+              size: 15,
               color: widget.isDark
                   ? AppColors.darkPrimaryText
                   : AppColors.lightPrimaryText,
@@ -1510,16 +1624,26 @@ class _ProfileBackground extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: isDark
-                ? [const Color(0xFF0D1117), const Color(0xFF121212), const Color(0xFF0C0D14)]
-                : [const Color(0xFFF8F5FF), const Color(0xFFFFFFFF), const Color(0xFFF5F8FF)],
+                ? [
+                    const Color(0xFF0D1117),
+                    const Color(0xFF121212),
+                    const Color(0xFF0C0D14)
+                  ]
+                : [
+                    const Color(0xFFF8F5FF),
+                    const Color(0xFFFFFFFF),
+                    const Color(0xFFF5F8FF)
+                  ],
           ),
         ),
         child: Stack(
           children: [
             Positioned(
-              top: -80, right: -50,
+              top: -80,
+              right: -50,
               child: Container(
-                width: 250, height: 250,
+                width: 250,
+                height: 250,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: RadialGradient(colors: [

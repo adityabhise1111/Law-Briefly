@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../main.dart' show themeModeNotifier;
-import '../../auth/services/session_service.dart';
+import '../auth/services/session_service.dart';
 import '../../../core/router/navigation_registry.dart';
 import '../../../core/theme/app_theme.dart';
 import 'settings_controller.dart';
@@ -26,15 +26,14 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen>
     with SingleTickerProviderStateMixin {
-
   late SettingsController _controller;
   late AnimationController _entranceCtrl;
-  late Animation<double>   _appBarFade;
-  late Animation<double>   _contentFade;
-  late Animation<Offset>   _contentSlide;
+  late Animation<double> _appBarFade;
+  late Animation<double> _contentFade;
+  late Animation<Offset> _contentSlide;
 
-  bool _isDarkMode     = false;
-  bool _isLoggingOut   = false;
+  bool _isDarkMode = false;
+  bool _isLoggingOut = false;
   bool _suggestionSent = false;
 
   // ─────────────────────────────────────────────
@@ -46,22 +45,23 @@ class _SettingsScreenState extends State<SettingsScreen>
     super.initState();
 
     _controller = SettingsController(
-      themeNotifier:    themeModeNotifier,
+      themeNotifier: themeModeNotifier,
       onLogoutRequested: _onLogoutComplete,
     );
 
     _entranceCtrl = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 700));
-    _appBarFade = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _entranceCtrl,
-          curve: const Interval(0.0, 0.45, curve: Curves.easeOut)));
-    _contentFade = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _entranceCtrl,
-          curve: const Interval(0.20, 0.80, curve: Curves.easeOut)));
-    _contentSlide = Tween<Offset>(
-        begin: const Offset(0, 0.04), end: Offset.zero).animate(
-      CurvedAnimation(parent: _entranceCtrl,
-          curve: const Interval(0.20, 0.85, curve: Curves.easeOutCubic)));
+    _appBarFade = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
+        parent: _entranceCtrl,
+        curve: const Interval(0.0, 0.45, curve: Curves.easeOut)));
+    _contentFade = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
+        parent: _entranceCtrl,
+        curve: const Interval(0.20, 0.80, curve: Curves.easeOut)));
+    _contentSlide =
+        Tween<Offset>(begin: const Offset(0, 0.04), end: Offset.zero).animate(
+            CurvedAnimation(
+                parent: _entranceCtrl,
+                curve: const Interval(0.20, 0.85, curve: Curves.easeOutCubic)));
 
     _controller.addListener(_onControllerUpdate);
     _controller.loadSettings();
@@ -94,8 +94,8 @@ class _SettingsScreenState extends State<SettingsScreen>
   void _onControllerUpdate() {
     if (!mounted) return;
     setState(() {
-      _isDarkMode     = _controller.isDarkMode(context);
-      _isLoggingOut   = _controller.state.isLoggingOut;
+      _isDarkMode = _controller.isDarkMode(context);
+      _isLoggingOut = _controller.state.isLoggingOut;
       _suggestionSent = _controller.state.suggestionSent;
     });
   }
@@ -121,7 +121,7 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   void _handleSendSuggestion() async {
     HapticFeedback.lightImpact();
-    final dark   = Theme.of(context).brightness == Brightness.dark;
+    final dark = Theme.of(context).brightness == Brightness.dark;
     final result = await _showSuggestionSheet(dark);
     if (result != null && result.isNotEmpty) {
       await _controller.sendSuggestion(result);
@@ -176,9 +176,9 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   @override
   Widget build(BuildContext context) {
-    final dark    = Theme.of(context).brightness == Brightness.dark;
-    final topPad  = MediaQuery.of(context).padding.top;
-    final botPad  = MediaQuery.of(context).padding.bottom;
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final topPad = MediaQuery.of(context).padding.top;
+    final botPad = MediaQuery.of(context).padding.bottom;
 
     SystemChrome.setSystemUIOverlayStyle(
       dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
@@ -215,7 +215,8 @@ class _SettingsScreenState extends State<SettingsScreen>
           child: Text(
             'Settings',
             style: AppTypography.titleLarge.copyWith(
-              color:      dark ? AppColors.darkPrimaryText : AppColors.lightPrimaryText,
+              color:
+                  dark ? AppColors.darkPrimaryText : AppColors.lightPrimaryText,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -242,7 +243,6 @@ class _SettingsScreenState extends State<SettingsScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             // ── SECTION: Account ──────────────────
             _SectionLabel(label: 'Account', isDark: dark),
             const SizedBox(height: AppSpacing.sm),
@@ -250,12 +250,12 @@ class _SettingsScreenState extends State<SettingsScreen>
               isDark: dark,
               children: [
                 GlassSettingsTile(
-                  icon:        Icons.person_outline_rounded,
-                  title:       'Profile',
-                  subtitle:    'Edit your name, college and details',
-                  iconColor:   dark ? AppColors.accentLight : AppColors.accent,
+                  icon: Icons.person_outline_rounded,
+                  title: 'Profile',
+                  subtitle: 'Edit your name, college and details',
+                  iconColor: dark ? AppColors.accentLight : AppColors.accent,
                   showDivider: false,
-                  onTap:       _handleProfile,
+                  onTap: _handleProfile,
                 ),
               ],
             ),
@@ -269,17 +269,17 @@ class _SettingsScreenState extends State<SettingsScreen>
               isDark: dark,
               children: [
                 GlassSettingsTile(
-                  icon:     Icons.dark_mode_outlined,
-                  title:    'Dark Mode',
-                  subtitle: _isDarkMode ? 'Dark theme active' : 'Light theme active',
-                  iconColor: dark
-                      ? const Color(0xFF8B5CF6)
-                      : const Color(0xFF7C3AED),
+                  icon: Icons.dark_mode_outlined,
+                  title: 'Dark Mode',
+                  subtitle:
+                      _isDarkMode ? 'Dark theme active' : 'Light theme active',
+                  iconColor:
+                      dark ? const Color(0xFF8B5CF6) : const Color(0xFF7C3AED),
                   showDivider: false,
                   trailing: Switch.adaptive(
-                    value:          _isDarkMode,
-                    onChanged:      _handleThemeToggle,
-                    activeColor:    AppColors.accent,
+                    value: _isDarkMode,
+                    onChanged: _handleThemeToggle,
+                    activeColor: AppColors.accent,
                     activeTrackColor: AppColors.accent.withOpacity(0.30),
                   ),
                 ),
@@ -295,21 +295,21 @@ class _SettingsScreenState extends State<SettingsScreen>
               isDark: dark,
               children: [
                 GlassSettingsTile(
-                  icon:      Icons.lightbulb_outline_rounded,
-                  title:     'Send Suggestion',
-                  subtitle:  _suggestionSent
+                  icon: Icons.lightbulb_outline_rounded,
+                  title: 'Send Suggestion',
+                  subtitle: _suggestionSent
                       ? 'Thanks! Suggestion sent.'
                       : 'Help us improve Law Briefly',
                   iconColor: const Color(0xFFF59E0B),
-                  onTap:     _handleSendSuggestion,
+                  onTap: _handleSendSuggestion,
                 ),
                 GlassSettingsTile(
-                  icon:        Icons.info_outline_rounded,
-                  title:       'About Law Briefly',
-                  subtitle:    'Version · Mission · Roadmap',
-                  iconColor:   dark ? AppColors.accentLight : AppColors.accent,
+                  icon: Icons.info_outline_rounded,
+                  title: 'About Law Briefly',
+                  subtitle: 'Version · Mission · Roadmap',
+                  iconColor: dark ? AppColors.accentLight : AppColors.accent,
                   showDivider: false,
-                  onTap:       _handleAbout,
+                  onTap: _handleAbout,
                 ),
               ],
             ),
@@ -323,19 +323,19 @@ class _SettingsScreenState extends State<SettingsScreen>
               isDark: dark,
               children: [
                 GlassSettingsTile(
-                  icon:      Icons.privacy_tip_outlined,
-                  title:     'Privacy Policy',
-                  subtitle:  'How we handle your data',
+                  icon: Icons.privacy_tip_outlined,
+                  title: 'Privacy Policy',
+                  subtitle: 'How we handle your data',
                   iconColor: const Color(0xFF10B981),
-                  onTap:     () {},
+                  onTap: () {},
                 ),
                 GlassSettingsTile(
-                  icon:        Icons.description_outlined,
-                  title:       'Terms of Use',
-                  subtitle:    'User agreement and conditions',
-                  iconColor:   const Color(0xFF10B981),
+                  icon: Icons.description_outlined,
+                  title: 'Terms of Use',
+                  subtitle: 'User agreement and conditions',
+                  iconColor: const Color(0xFF10B981),
                   showDivider: false,
-                  onTap:       () {},
+                  onTap: () {},
                 ),
               ],
             ),
@@ -349,15 +349,16 @@ class _SettingsScreenState extends State<SettingsScreen>
               isDark: dark,
               children: [
                 GlassSettingsTile(
-                  icon:          Icons.logout_rounded,
-                  title:         _isLoggingOut ? 'Signing out…' : 'Sign Out',
-                  subtitle:      'Clear session and return to login',
-                  iconColor:     AppColors.error,
+                  icon: Icons.logout_rounded,
+                  title: _isLoggingOut ? 'Signing out…' : 'Sign Out',
+                  subtitle: 'Clear session and return to login',
+                  iconColor: AppColors.error,
                   isDestructive: true,
-                  showDivider:   false,
+                  showDivider: false,
                   trailing: _isLoggingOut
                       ? const SizedBox(
-                          width: 18, height: 18,
+                          width: 18,
+                          height: 18,
                           child: CircularProgressIndicator(
                               strokeWidth: 2, color: AppColors.error))
                       : null,
@@ -382,7 +383,7 @@ class _SettingsScreenState extends State<SettingsScreen>
     final dark = Theme.of(context).brightness == Brightness.dark;
 
     final result = await showDialog<bool>(
-      context:      context,
+      context: context,
       barrierColor: Colors.black.withOpacity(0.45),
       builder: (ctx) => _LogoutConfirmDialog(isDark: dark),
     );
@@ -401,11 +402,11 @@ class _SettingsScreenState extends State<SettingsScreen>
     await GlassBottomSheet.show(
       context,
       initialChildSize: 0.60,
-      maxChildSize:     0.85,
+      maxChildSize: 0.85,
       child: _SuggestionSheetContent(
-        isDark:     dark,
+        isDark: dark,
         controller: ctrl,
-        onSend:     (text) {
+        onSend: (text) {
           result = text;
           Navigator.of(context).pop();
         },
@@ -423,7 +424,7 @@ class _SettingsScreenState extends State<SettingsScreen>
 
 class _SectionLabel extends StatelessWidget {
   final String label;
-  final bool   isDark;
+  final bool isDark;
   const _SectionLabel({required this.label, required this.isDark});
 
   @override
@@ -432,12 +433,12 @@ class _SectionLabel extends StatelessWidget {
         child: Text(
           label.toUpperCase(),
           style: AppTypography.labelSmall.copyWith(
-            color:         isDark
+            color: isDark
                 ? AppColors.darkSecondaryText
                 : AppColors.lightSecondaryText,
             letterSpacing: 0.8,
-            fontSize:      11,
-            fontWeight:    FontWeight.w600,
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
           ),
         ),
       );
@@ -448,7 +449,7 @@ class _SectionLabel extends StatelessWidget {
 // ═════════════════════════════════════════════
 
 class _SettingsCard extends StatelessWidget {
-  final bool         isDark;
+  final bool isDark;
   final List<Widget> children;
   const _SettingsCard({required this.isDark, required this.children});
 
@@ -459,14 +460,11 @@ class _SettingsCard extends StatelessWidget {
           filter: ImageFilter.blur(sigmaX: AppBlur.md, sigmaY: AppBlur.md),
           child: Container(
             decoration: BoxDecoration(
-              color: isDark
-                  ? const Color(0xCC1C1C1E)
-                  : const Color(0xE6FFFFFF),
+              color: isDark ? const Color(0xCC1C1C1E) : const Color(0xE6FFFFFF),
               borderRadius: AppRadius.card,
               border: Border.all(
-                color: isDark
-                    ? const Color(0x1AFFFFFF)
-                    : const Color(0x1A000000),
+                color:
+                    isDark ? const Color(0x1AFFFFFF) : const Color(0x1A000000),
                 width: 0.5,
               ),
               boxShadow: isDark ? AppShadows.darkGlass : AppShadows.lightGlass,
@@ -492,12 +490,13 @@ class _VersionFooter extends StatelessWidget {
   Widget build(BuildContext context) => Center(
         child: Column(children: [
           Container(
-            width: 28, height: 28,
+            width: 28,
+            height: 28,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: const LinearGradient(
-                begin:  Alignment.topLeft,
-                end:    Alignment.bottomRight,
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
                 colors: [AppColors.accent, Color(0xFF7C3AED)],
               ),
             ),
@@ -506,21 +505,23 @@ class _VersionFooter extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.sm),
           Text('Law Briefly',
-            style: AppTypography.labelMedium.copyWith(
-              color: isDark ? AppColors.darkSecondaryText : AppColors.lightSecondaryText,
-              fontFamily:  'Georgia',
-              fontStyle:   FontStyle.italic,
-            )),
+              style: AppTypography.labelMedium.copyWith(
+                color: isDark
+                    ? AppColors.darkSecondaryText
+                    : AppColors.lightSecondaryText,
+                fontFamily: 'Georgia',
+                fontStyle: FontStyle.italic,
+              )),
           const SizedBox(height: 3),
           Text('Version 1.0.0  ·  Offline · Private · India',
-            style: AppTypography.caption.copyWith(
-              color: (isDark
-                  ? AppColors.darkTertiaryText
-                  : AppColors.lightTertiaryText)
-                  .withOpacity(0.70),
-              fontSize:  10.5,
-              letterSpacing: 0.3,
-            )),
+              style: AppTypography.caption.copyWith(
+                color: (isDark
+                        ? AppColors.darkTertiaryText
+                        : AppColors.lightTertiaryText)
+                    .withOpacity(0.70),
+                fontSize: 10.5,
+                letterSpacing: 0.3,
+              )),
         ]),
       );
 }
@@ -535,12 +536,14 @@ class _LogoutConfirmDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textColor = isDark ? AppColors.darkPrimaryText   : AppColors.lightPrimaryText;
-    final secColor  = isDark ? AppColors.darkSecondaryText : AppColors.lightSecondaryText;
+    final textColor =
+        isDark ? AppColors.darkPrimaryText : AppColors.lightPrimaryText;
+    final secColor =
+        isDark ? AppColors.darkSecondaryText : AppColors.lightSecondaryText;
 
     return Dialog(
       backgroundColor: Colors.transparent,
-      elevation:       0,
+      elevation: 0,
       child: ClipRRect(
         borderRadius: AppRadius.dialog,
         child: BackdropFilter(
@@ -548,14 +551,11 @@ class _LogoutConfirmDialog extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(AppSpacing.xl),
             decoration: BoxDecoration(
-              color: isDark
-                  ? const Color(0xF01C1C1E)
-                  : const Color(0xF0FFFFFF),
+              color: isDark ? const Color(0xF01C1C1E) : const Color(0xF0FFFFFF),
               borderRadius: AppRadius.dialog,
               border: Border.all(
-                color: isDark
-                    ? const Color(0x26FFFFFF)
-                    : const Color(0x26000000),
+                color:
+                    isDark ? const Color(0x26FFFFFF) : const Color(0x26000000),
                 width: 0.5,
               ),
               boxShadow: isDark ? AppShadows.darkLg : AppShadows.lightLg,
@@ -563,12 +563,12 @@ class _LogoutConfirmDialog extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-
                 // Icon
                 Container(
-                  width: 52, height: 52,
+                  width: 52,
+                  height: 52,
                   decoration: BoxDecoration(
-                    color:        AppColors.error.withOpacity(isDark ? 0.14 : 0.08),
+                    color: AppColors.error.withOpacity(isDark ? 0.14 : 0.08),
                     borderRadius: AppRadius.lgAll,
                   ),
                   child: const Icon(Icons.logout_rounded,
@@ -579,23 +579,23 @@ class _LogoutConfirmDialog extends StatelessWidget {
 
                 // Title
                 Text('Sign Out?',
-                  style: AppTypography.titleMedium.copyWith(
-                    color:      textColor,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  textAlign: TextAlign.center),
+                    style: AppTypography.titleMedium.copyWith(
+                      color: textColor,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    textAlign: TextAlign.center),
 
                 const SizedBox(height: AppSpacing.sm),
 
                 // Message
                 Text(
-                  "Your bookmarks and notes are saved locally.\nYou'll need to sign in again to continue.",
-                  style: AppTypography.bodySmall.copyWith(
-                    fontFamily: null,
-                    color:      secColor,
-                    height:     1.55,
-                  ),
-                  textAlign: TextAlign.center),
+                    "Your bookmarks and notes are saved locally.\nYou'll need to sign in again to continue.",
+                    style: AppTypography.bodySmall.copyWith(
+                      fontFamily: null,
+                      color: secColor,
+                      height: 1.55,
+                    ),
+                    textAlign: TextAlign.center),
 
                 const SizedBox(height: AppSpacing.xl),
 
@@ -603,21 +603,21 @@ class _LogoutConfirmDialog extends StatelessWidget {
                 Row(children: [
                   Expanded(
                     child: _DialogButton(
-                      label:    'Cancel',
+                      label: 'Cancel',
                       isPrimary: false,
-                      isError:   false,
-                      isDark:    isDark,
-                      onTap:     () => Navigator.pop(context, false),
+                      isError: false,
+                      isDark: isDark,
+                      onTap: () => Navigator.pop(context, false),
                     ),
                   ),
                   const SizedBox(width: AppSpacing.sm),
                   Expanded(
                     child: _DialogButton(
-                      label:    'Sign Out',
+                      label: 'Sign Out',
                       isPrimary: true,
-                      isError:   true,
-                      isDark:    isDark,
-                      onTap:     () {
+                      isError: true,
+                      isDark: isDark,
+                      onTap: () {
                         HapticFeedback.mediumImpact();
                         Navigator.pop(context, true);
                       },
@@ -638,9 +638,9 @@ class _LogoutConfirmDialog extends StatelessWidget {
 // ═════════════════════════════════════════════
 
 class _SuggestionSheetContent extends StatefulWidget {
-  final bool                   isDark;
-  final TextEditingController  controller;
-  final ValueChanged<String>   onSend;
+  final bool isDark;
+  final TextEditingController controller;
+  final ValueChanged<String> onSend;
 
   const _SuggestionSheetContent({
     required this.isDark,
@@ -653,8 +653,7 @@ class _SuggestionSheetContent extends StatefulWidget {
       _SuggestionSheetContentState();
 }
 
-class _SuggestionSheetContentState
-    extends State<_SuggestionSheetContent> {
+class _SuggestionSheetContentState extends State<_SuggestionSheetContent> {
   bool _hasText = false;
 
   @override
@@ -667,12 +666,12 @@ class _SuggestionSheetContentState
 
   @override
   Widget build(BuildContext context) {
-    final textColor = widget.isDark
-        ? AppColors.darkPrimaryText   : AppColors.lightPrimaryText;
-    final secColor  = widget.isDark
-        ? AppColors.darkSecondaryText : AppColors.lightSecondaryText;
-    final accent    = widget.isDark
-        ? AppColors.accentLight       : AppColors.accent;
+    final textColor =
+        widget.isDark ? AppColors.darkPrimaryText : AppColors.lightPrimaryText;
+    final secColor = widget.isDark
+        ? AppColors.darkSecondaryText
+        : AppColors.lightSecondaryText;
+    final accent = widget.isDark ? AppColors.accentLight : AppColors.accent;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -682,17 +681,17 @@ class _SuggestionSheetContentState
           Icon(Icons.lightbulb_outline_rounded, size: 18, color: accent),
           const SizedBox(width: AppSpacing.sm),
           Text('Send a Suggestion',
-            style: AppTypography.titleMedium.copyWith(
-              color:      textColor,
-              fontWeight: FontWeight.w700,
-            )),
+              style: AppTypography.titleMedium.copyWith(
+                color: textColor,
+                fontWeight: FontWeight.w700,
+              )),
         ]),
 
         const SizedBox(height: AppSpacing.sm),
 
         Text('Share ideas for new features, content, or improvements.',
-          style: AppTypography.bodySmall.copyWith(
-              fontFamily: null, color: secColor)),
+            style: AppTypography.bodySmall
+                .copyWith(fontFamily: null, color: secColor)),
 
         const SizedBox(height: AppSpacing.xl),
 
@@ -712,18 +711,18 @@ class _SuggestionSheetContentState
           ),
           padding: const EdgeInsets.all(AppSpacing.md),
           child: TextField(
-            controller:         widget.controller,
-            autofocus:          true,
-            maxLines:           6,
+            controller: widget.controller,
+            autofocus: true,
+            maxLines: 6,
             textCapitalization: TextCapitalization.sentences,
-            style: AppTypography.bodySmall.copyWith(
-                fontFamily: null, color: textColor),
+            style: AppTypography.bodySmall
+                .copyWith(fontFamily: null, color: textColor),
             decoration: InputDecoration(
-              hintText:  'What would make Law Briefly better?',
+              hintText: 'What would make Law Briefly better?',
               hintStyle: AppTypography.bodySmall.copyWith(
                   fontFamily: null,
-                  color:      secColor.withOpacity(0.45),
-                  fontStyle:  FontStyle.italic),
+                  color: secColor.withOpacity(0.45),
+                  fontStyle: FontStyle.italic),
             ),
           ),
         ),
@@ -736,21 +735,21 @@ class _SuggestionSheetContentState
           height: 50,
           child: AnimatedOpacity(
             duration: AppAnimation.standard,
-            opacity:  _hasText ? 1.0 : 0.45,
+            opacity: _hasText ? 1.0 : 0.45,
             child: GestureDetector(
               onTap: _hasText
                   ? () => widget.onSend(widget.controller.text.trim())
                   : null,
               child: Container(
                 decoration: BoxDecoration(
-                  color:        accent,
+                  color: accent,
                   borderRadius: AppRadius.button,
-                  boxShadow:    _hasText ? AppShadows.accentGlow : null,
+                  boxShadow: _hasText ? AppShadows.accentGlow : null,
                 ),
                 child: Center(
                   child: Text('Send Suggestion',
-                    style: AppTypography.labelLarge.copyWith(
-                        color: Colors.white)),
+                      style: AppTypography.labelLarge
+                          .copyWith(color: Colors.white)),
                 ),
               ),
             ),
@@ -766,8 +765,8 @@ class _SuggestionSheetContentState
 // ═════════════════════════════════════════════
 
 class _DialogButton extends StatefulWidget {
-  final String     label;
-  final bool       isPrimary, isError, isDark;
+  final String label;
+  final bool isPrimary, isError, isDark;
   final VoidCallback onTap;
 
   const _DialogButton({
@@ -787,33 +786,34 @@ class _DialogButtonState extends State<_DialogButton> {
 
   @override
   Widget build(BuildContext context) {
-    final color  = widget.isError ? AppColors.error : AppColors.accent;
+    final color = widget.isError ? AppColors.error : AppColors.accent;
     final bgColor = widget.isPrimary
         ? color
         : color.withOpacity(widget.isDark ? 0.12 : 0.08);
-    final textColor = widget.isPrimary
-        ? Colors.white
-        : color;
+    final textColor = widget.isPrimary ? Colors.white : color;
 
     return GestureDetector(
-      onTapDown:   (_) => setState(() => _pressed = true),
-      onTapUp:     (_) { setState(() => _pressed = false); widget.onTap(); },
+      onTapDown: (_) => setState(() => _pressed = true),
+      onTapUp: (_) {
+        setState(() => _pressed = false);
+        widget.onTap();
+      },
       onTapCancel: () => setState(() => _pressed = false),
       child: AnimatedOpacity(
         duration: const Duration(milliseconds: 80),
-        opacity:  _pressed ? 0.60 : 1.0,
+        opacity: _pressed ? 0.60 : 1.0,
         child: Container(
           height: 46,
           decoration: BoxDecoration(
-            color:        bgColor,
+            color: bgColor,
             borderRadius: AppRadius.mdAll,
           ),
           child: Center(
             child: Text(widget.label,
-              style: AppTypography.labelMedium.copyWith(
-                color:      textColor,
-                fontWeight: FontWeight.w600,
-              )),
+                style: AppTypography.labelMedium.copyWith(
+                  color: textColor,
+                  fontWeight: FontWeight.w600,
+                )),
           ),
         ),
       ),
@@ -828,39 +828,46 @@ class _DialogButtonState extends State<_DialogButton> {
 class _BackButton extends StatefulWidget {
   final bool isDark;
   const _BackButton({required this.isDark});
-  @override State<_BackButton> createState() => _BackButtonState();
+  @override
+  State<_BackButton> createState() => _BackButtonState();
 }
 
 class _BackButtonState extends State<_BackButton>
     with SingleTickerProviderStateMixin {
   late AnimationController _press;
-  late Animation<double>   _scale;
+  late Animation<double> _scale;
 
   @override
   void initState() {
     super.initState();
-    _press = AnimationController(vsync: this,
+    _press = AnimationController(
+        vsync: this,
         duration: const Duration(milliseconds: 110),
         reverseDuration: const Duration(milliseconds: 200));
     _scale = Tween<double>(begin: 1.0, end: 0.88)
         .animate(CurvedAnimation(parent: _press, curve: Curves.easeInOut));
   }
 
-  @override void dispose() { _press.dispose(); super.dispose(); }
+  @override
+  void dispose() {
+    _press.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) => ScaleTransition(
         scale: _scale,
         child: GestureDetector(
-          onTapDown:   (_) => _press.forward(),
-          onTapUp:     (_) {
+          onTapDown: (_) => _press.forward(),
+          onTapUp: (_) {
             _press.reverse();
             HapticFeedback.lightImpact();
             Navigator.maybePop(context);
           },
           onTapCancel: () => _press.reverse(),
           child: Container(
-            width:  34, height: 34,
+            width: 34,
+            height: 34,
             margin: const EdgeInsets.only(left: AppSpacing.sm),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
@@ -869,7 +876,8 @@ class _BackButtonState extends State<_BackButton>
                   : const Color(0x1A000000),
             ),
             child: Icon(
-              Icons.arrow_back_ios_rounded, size: 15,
+              Icons.arrow_back_ios_rounded,
+              size: 15,
               color: widget.isDark
                   ? AppColors.darkPrimaryText
                   : AppColors.lightPrimaryText,
@@ -891,8 +899,8 @@ class _SettingsBackground extends StatelessWidget {
   Widget build(BuildContext context) => DecoratedBox(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin:  Alignment.topCenter,
-            end:    Alignment.bottomCenter,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
             colors: isDark
                 ? [const Color(0xFF0D1117), const Color(0xFF121212)]
                 : [AppColors.lightGroupedBackground, AppColors.lightBackground],
@@ -901,9 +909,11 @@ class _SettingsBackground extends StatelessWidget {
         child: Stack(children: [
           // Top-right subtle accent orb
           Positioned(
-            top:   -80, right: -60,
+            top: -80,
+            right: -60,
             child: Container(
-              width: 260, height: 260,
+              width: 260,
+              height: 260,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: RadialGradient(colors: [

@@ -15,9 +15,9 @@ import 'pdf_progress_service.dart';
 // ─────────────────────────────────────────────
 
 enum ReadingSessionType {
-  section,    // Act section
-  article,    // Constitution article
-  pdf,        // Academic Notes PDF
+  section, // Act section
+  article, // Constitution article
+  pdf, // Academic Notes PDF
 }
 
 // ─────────────────────────────────────────────
@@ -25,21 +25,20 @@ enum ReadingSessionType {
 // ─────────────────────────────────────────────
 
 class _ActiveSession {
-  final String             contentId;
+  final String contentId;
   final ReadingSessionType type;
-  final DateTime           openedAt;
-  int                      lastPosition;
-  int                      lastPage;
+  final DateTime openedAt;
+  int lastPosition;
+  int lastPage;
 
   _ActiveSession({
     required this.contentId,
     required this.type,
     this.lastPosition = 0,
-    this.lastPage     = 1,
+    this.lastPage = 1,
   }) : openedAt = DateTime.now();
 
-  int get elapsedSeconds =>
-      DateTime.now().difference(openedAt).inSeconds;
+  int get elapsedSeconds => DateTime.now().difference(openedAt).inSeconds;
 
   @override
   String toString() =>
@@ -52,12 +51,12 @@ class _ActiveSession {
 // ─────────────────────────────────────────────
 
 class SessionEvent {
-  final String             contentId;
+  final String contentId;
   final ReadingSessionType type;
-  final DateTime           timestamp;
-  final int?               positionAtClose;
-  final int                durationSeconds;
-  final bool               wasCompleted;
+  final DateTime timestamp;
+  final int? positionAtClose;
+  final int durationSeconds;
+  final bool wasCompleted;
 
   const SessionEvent({
     required this.contentId,
@@ -76,7 +75,7 @@ class SessionEvent {
 class ReadingSessionManager {
   // ── Dependencies ──────────────────────────────
   final ReaderProgressService _readerProgress;
-  final PdfProgressService    _pdfProgress;
+  final PdfProgressService _pdfProgress;
 
   // ── Active sessions ───────────────────────────
   // Keyed by contentId. Supports multiple simultaneous sessions
@@ -97,9 +96,9 @@ class ReadingSessionManager {
 
   ReadingSessionManager({
     ReaderProgressService? readerProgress,
-    PdfProgressService?    pdfProgress,
-  }) : _readerProgress = readerProgress ?? ReaderProgressService(),
-       _pdfProgress    = pdfProgress    ?? PdfProgressService() {
+    PdfProgressService? pdfProgress,
+  })  : _readerProgress = readerProgress ?? ReaderProgressService(),
+        _pdfProgress = pdfProgress ?? PdfProgressService() {
     _startAutoSave();
   }
 
@@ -109,11 +108,11 @@ class ReadingSessionManager {
   // ─────────────────────────────────────────────
 
   Future<void> recordOpen({
-    required String             contentId,
+    required String contentId,
     required ReadingSessionType type,
-    int                         initialPosition = 0,
-    int                         initialPage     = 1,
-    int                         totalPages      = 0,
+    int initialPosition = 0,
+    int initialPage = 1,
+    int totalPages = 0,
   }) async {
     // End any existing session for this contentId
     if (_activeSessions.containsKey(contentId)) {
@@ -121,10 +120,10 @@ class ReadingSessionManager {
     }
 
     _activeSessions[contentId] = _ActiveSession(
-      contentId:    contentId,
-      type:         type,
+      contentId: contentId,
+      type: type,
       lastPosition: initialPosition,
-      lastPage:     initialPage,
+      lastPage: initialPage,
     );
 
     debugPrint('[ReadingSessionManager] Open: $contentId (${type.name})');
@@ -132,13 +131,13 @@ class ReadingSessionManager {
     // Update lastOpened timestamp immediately
     if (type == ReadingSessionType.pdf) {
       await _pdfProgress.saveProgress(
-        pdfId:      contentId,
-        lastPage:   initialPage,
+        pdfId: contentId,
+        lastPage: initialPage,
         totalPages: totalPages,
       );
     } else {
       await _readerProgress.saveProgress(
-        contentId:        contentId,
+        contentId: contentId,
         lastReadPosition: initialPosition,
       );
     }
@@ -154,30 +153,30 @@ class ReadingSessionManager {
   /// For sections/articles: [position] is the item index in the list.
   /// For PDFs:              [page] is the current page number.
   Future<void> recordProgress({
-    required String             contentId,
+    required String contentId,
     required ReadingSessionType type,
-    int                         position   = 0,
-    int                         page       = 1,
-    int                         totalPages = 0,
-    double                      scrollOffset = 0.0,
+    int position = 0,
+    int page = 1,
+    int totalPages = 0,
+    double scrollOffset = 0.0,
   }) async {
     final session = _activeSessions[contentId];
 
     if (session != null) {
       session.lastPosition = position;
-      session.lastPage     = page;
+      session.lastPage = page;
     }
 
     if (type == ReadingSessionType.pdf) {
       await _pdfProgress.updatePage(
-        pdfId:      contentId,
-        page:       page,
+        pdfId: contentId,
+        page: page,
         totalPages: totalPages,
       );
     } else {
       await _readerProgress.updateLastPosition(
-        contentId:    contentId,
-        position:     position,
+        contentId: contentId,
+        position: position,
         scrollOffset: scrollOffset,
       );
     }
@@ -189,12 +188,12 @@ class ReadingSessionManager {
   // ─────────────────────────────────────────────
 
   Future<void> recordClose({
-    required String             contentId,
+    required String contentId,
     required ReadingSessionType type,
-    int                         finalPosition = 0,
-    int                         finalPage     = 1,
-    int                         totalPages    = 0,
-    bool                        wasCompleted  = false,
+    int finalPosition = 0,
+    int finalPage = 1,
+    int totalPages = 0,
+    bool wasCompleted = false,
   }) async {
     final session = _activeSessions[contentId];
 
@@ -204,31 +203,32 @@ class ReadingSessionManager {
       // Persist final position
       if (type == ReadingSessionType.pdf) {
         await _pdfProgress.saveProgress(
-          pdfId:      contentId,
-          lastPage:   finalPage,
+          pdfId: contentId,
+          lastPage: finalPage,
           totalPages: totalPages,
           isCompleted: wasCompleted,
         );
       } else {
         await _readerProgress.saveProgress(
-          contentId:        contentId,
+          contentId: contentId,
           lastReadPosition: finalPosition,
-          isCompleted:      wasCompleted,
+          isCompleted: wasCompleted,
         );
         await _readerProgress.addReadTime(
           contentId: contentId,
-          seconds:   durationSeconds,
+          seconds: durationSeconds,
         );
       }
 
       // Log session event (future analytics hook)
       _logEvent(SessionEvent(
-        contentId:       contentId,
-        type:            type,
-        timestamp:       DateTime.now(),
+        contentId: contentId,
+        type: type,
+        timestamp: DateTime.now(),
         durationSeconds: durationSeconds,
-        positionAtClose: type == ReadingSessionType.pdf ? finalPage : finalPosition,
-        wasCompleted:    wasCompleted,
+        positionAtClose:
+            type == ReadingSessionType.pdf ? finalPage : finalPosition,
+        wasCompleted: wasCompleted,
       ));
 
       _activeSessions.remove(contentId);
@@ -246,15 +246,15 @@ class ReadingSessionManager {
   // ─────────────────────────────────────────────
 
   Future<void> markCompleted({
-    required String             contentId,
+    required String contentId,
     required ReadingSessionType type,
-    int                         totalPages = 0,
+    int totalPages = 0,
   }) async {
     if (type == ReadingSessionType.pdf) {
       await _pdfProgress.saveProgress(
-        pdfId:       contentId,
-        lastPage:    totalPages,
-        totalPages:  totalPages,
+        pdfId: contentId,
+        lastPage: totalPages,
+        totalPages: totalPages,
         isCompleted: true,
       );
     } else {
@@ -269,8 +269,8 @@ class ReadingSessionManager {
 
   bool isActive(String contentId) => _activeSessions.containsKey(contentId);
 
-  int  activeCount          => _activeSessions.length;
-  List<String> activeIds    => _activeSessions.keys.toList();
+  int get activeCount => _activeSessions.length;
+  List<String> get activeIds => _activeSessions.keys.toList();
 
   int elapsedSeconds(String contentId) =>
       _activeSessions[contentId]?.elapsedSeconds ?? 0;
@@ -318,18 +318,18 @@ class ReadingSessionManager {
     if (!silent) {
       if (session.type == ReadingSessionType.pdf) {
         await _pdfProgress.saveProgress(
-          pdfId:      contentId,
-          lastPage:   session.lastPage,
+          pdfId: contentId,
+          lastPage: session.lastPage,
           totalPages: 0,
         );
       } else {
         await _readerProgress.saveProgress(
-          contentId:        contentId,
+          contentId: contentId,
           lastReadPosition: session.lastPosition,
         );
         await _readerProgress.addReadTime(
           contentId: contentId,
-          seconds:   session.elapsedSeconds,
+          seconds: session.elapsedSeconds,
         );
       }
     }
@@ -345,14 +345,14 @@ class ReadingSessionManager {
         );
         if (session.type == ReadingSessionType.pdf) {
           await _pdfProgress.updatePage(
-            pdfId:      session.contentId,
-            page:       session.lastPage,
+            pdfId: session.contentId,
+            page: session.lastPage,
             totalPages: 0,
           );
         } else {
           await _readerProgress.updateLastPosition(
             contentId: session.contentId,
-            position:  session.lastPosition,
+            position: session.lastPosition,
           );
         }
       }

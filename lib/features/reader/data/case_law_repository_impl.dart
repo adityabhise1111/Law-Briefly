@@ -10,7 +10,7 @@ import 'case_law_repository.dart';
 // ─────────────────────────────────────────────
 
 class CaseLawRepositoryException implements Exception {
-  final String  message;
+  final String message;
   final String? path;
   final Object? cause;
 
@@ -21,10 +21,9 @@ class CaseLawRepositoryException implements Exception {
   });
 
   @override
-  String toString() =>
-      'CaseLawRepositoryException: $message'
-      '${path  != null ? " [path: $path]"     : ""}'
-      '${cause != null ? " — cause: $cause"   : ""}';
+  String toString() => 'CaseLawRepositoryException: $message'
+      '${path != null ? " [path: $path]" : ""}'
+      '${cause != null ? " — cause: $cause" : ""}';
 }
 
 // ─────────────────────────────────────────────
@@ -47,7 +46,7 @@ class CaseLawRepositoryImpl implements CaseLawRepository {
 
   // ── In-memory index: id → CaseLaw ─────────────
   Map<String, CaseLaw>? _index;
-  bool                  _loaded = false;
+  bool _loaded = false;
 
   // ─────────────────────────────────────────────
   // MARK: — PUBLIC API
@@ -71,10 +70,10 @@ class CaseLawRepositoryImpl implements CaseLawRepository {
 
     // Preserve original ID order
     final order = {for (var i = 0; i < ids.length; i++) ids[i]: i};
-    results.sort((a, b) =>
-        (order[a.id] ?? 999).compareTo(order[b.id] ?? 999));
+    results.sort((a, b) => (order[a.id] ?? 999).compareTo(order[b.id] ?? 999));
 
-    debugPrint('[$_tag] getCaseLawsByIds: returned ${results.length}/${ids.length}');
+    debugPrint(
+        '[$_tag] getCaseLawsByIds: returned ${results.length}/${ids.length}');
     return results;
   }
 
@@ -86,6 +85,12 @@ class CaseLawRepositoryImpl implements CaseLawRepository {
       debugPrint('[$_tag] getCaseLawById: not found — $id');
     }
     return caseLaw;
+  }
+
+  @override
+  Future<List<CaseLaw>> getAllCaseLaws() async {
+    await _ensureLoaded();
+    return List.unmodifiable(_index?.values ?? const <CaseLaw>[]);
   }
 
   // ─────────────────────────────────────────────
@@ -111,9 +116,10 @@ class CaseLawRepositoryImpl implements CaseLawRepository {
       }),
     );
 
-    _index  = index;
+    _index = index;
     _loaded = true;
-    debugPrint('[$_tag] Indexed ${index.length} case laws from ${_defaultPaths.length} files.');
+    debugPrint(
+        '[$_tag] Indexed ${index.length} case laws from ${_defaultPaths.length} files.');
   }
 
   // ─────────────────────────────────────────────
@@ -146,8 +152,8 @@ class CaseLawRepositoryImpl implements CaseLawRepository {
       debugPrint('[$_tag] JSON parse error in $path: $e');
       throw CaseLawRepositoryException(
         message: 'Invalid JSON in case law file.',
-        path:    path,
-        cause:   e,
+        path: path,
+        cause: e,
       );
     }
   }
@@ -176,7 +182,7 @@ class CaseLawRepositoryImpl implements CaseLawRepository {
   // ── CACHE MANAGEMENT ─────────────────────────
 
   void clearCache() {
-    _index  = null;
+    _index = null;
     _loaded = false;
     debugPrint('[$_tag] Cache cleared.');
   }

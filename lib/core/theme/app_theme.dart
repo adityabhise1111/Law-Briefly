@@ -3,6 +3,7 @@
 // Production-ready | Material 3 | Light + Dark | Reader-First
 
 import 'dart:ui';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,60 +13,61 @@ import 'package:flutter/services.dart';
 
 abstract final class AppColors {
   // ── Light Theme ──────────────────────────────
-  static const Color lightBackground       = Color(0xFFFFFFFF);
-  static const Color lightSecondaryBg      = Color(0xFFF8F9FA);
-  static const Color lightTertiaryBg       = Color(0xFFEFF0F1);
-  static const Color lightPrimaryText      = Color(0xFF1A1A1A);
-  static const Color lightSecondaryText    = Color(0xFF8E8E93);
-  static const Color lightTertiaryText     = Color(0xFFAEAEB2);
-  static const Color lightSeparator       = Color(0x33C6C6C8);
-  static const Color lightGroupedBg       = Color(0xFFF2F2F7);
+  static const Color lightBackground = Color(0xFFFFFFFF);
+  static const Color lightSecondaryBg = Color(0xFFF8F9FA);
+  static const Color lightTertiaryBg = Color(0xFFEFF0F1);
+  static const Color lightPrimaryText = Color(0xFF1A1A1A);
+  static const Color lightSecondaryText = Color(0xFF8E8E93);
+  static const Color lightTertiaryText = Color(0xFFAEAEB2);
+  static const Color lightSeparator = Color(0x33C6C6C8);
+  static const Color lightGroupedBg = Color(0xFFF2F2F7);
+  static const Color lightGroupedBackground = lightGroupedBg;
 
   // ── Dark Theme ───────────────────────────────
-  static const Color darkBackground        = Color(0xFF121212);
-  static const Color darkSecondaryBg       = Color(0xFF1E1E1E);
-  static const Color darkTertiaryBg        = Color(0xFF2C2C2E);
-  static const Color darkPrimaryText       = Color(0xFFF5F5F5);
-  static const Color darkSecondaryText     = Color(0xFFA0A0A0);
-  static const Color darkTertiaryText      = Color(0xFF636366);
-  static const Color darkSeparator        = Color(0x33545458);
-  static const Color darkGroupedBg        = Color(0xFF1C1C1E);
+  static const Color darkBackground = Color(0xFF121212);
+  static const Color darkSecondaryBg = Color(0xFF1E1E1E);
+  static const Color darkTertiaryBg = Color(0xFF2C2C2E);
+  static const Color darkPrimaryText = Color(0xFFF5F5F5);
+  static const Color darkSecondaryText = Color(0xFFA0A0A0);
+  static const Color darkTertiaryText = Color(0xFF636366);
+  static const Color darkSeparator = Color(0x33545458);
+  static const Color darkGroupedBg = Color(0xFF1C1C1E);
 
   // ── Brand / Accent ───────────────────────────
-  static const Color accent               = Color(0xFF1C4ED8);   // Royal blue — law & authority
-  static const Color accentLight          = Color(0xFF3B82F6);
-  static const Color accentMuted          = Color(0x261C4ED8);
-  static const Color accentDark           = Color(0xFF1E3A8A);
-  static const Color gold                 = Color(0xFFD4AF37);   // Legal gold accent
-  static const Color goldMuted            = Color(0x26D4AF37);
+  static const Color accent = Color(0xFF1C4ED8); // Royal blue — law & authority
+  static const Color accentLight = Color(0xFF3B82F6);
+  static const Color accentMuted = Color(0x261C4ED8);
+  static const Color accentDark = Color(0xFF1E3A8A);
+  static const Color gold = Color(0xFFD4AF37); // Legal gold accent
+  static const Color goldMuted = Color(0x26D4AF37);
 
   // ── Semantic ─────────────────────────────────
-  static const Color success              = Color(0xFF34C759);
-  static const Color warning              = Color(0xFFFF9F0A);
-  static const Color error               = Color(0xFFFF3B30);
-  static const Color info                = Color(0xFF0A84FF);
+  static const Color success = Color(0xFF34C759);
+  static const Color warning = Color(0xFFFF9F0A);
+  static const Color error = Color(0xFFFF3B30);
+  static const Color info = Color(0xFF0A84FF);
 
   // ── Glass Surfaces — Light ───────────────────
-  static const Color glassLightBase       = Color(0xB3FFFFFF);   // 70% white
-  static const Color glassLightTint       = Color(0x1AFFFFFF);   // 10% white
-  static const Color glassLightBorder     = Color(0x33FFFFFF);   // 20% white
-  static const Color glassLightHighlight  = Color(0x40FFFFFF);   // 25% white
-  static const Color glassLightShadow     = Color(0x1A000000);   // 10% black
+  static const Color glassLightBase = Color(0xB3FFFFFF); // 70% white
+  static const Color glassLightTint = Color(0x1AFFFFFF); // 10% white
+  static const Color glassLightBorder = Color(0x33FFFFFF); // 20% white
+  static const Color glassLightHighlight = Color(0x40FFFFFF); // 25% white
+  static const Color glassLightShadow = Color(0x1A000000); // 10% black
 
   // ── Glass Surfaces — Dark ────────────────────
-  static const Color glassDarkBase        = Color(0x99000000);   // 60% black
-  static const Color glassDarkTint        = Color(0x0DFFFFFF);   // 5% white
-  static const Color glassDarkBorder      = Color(0x1AFFFFFF);   // 10% white
-  static const Color glassDarkHighlight   = Color(0x26FFFFFF);   // 15% white
-  static const Color glassDarkShadow      = Color(0x40000000);   // 25% black
+  static const Color glassDarkBase = Color(0x99000000); // 60% black
+  static const Color glassDarkTint = Color(0x0DFFFFFF); // 5% white
+  static const Color glassDarkBorder = Color(0x1AFFFFFF); // 10% white
+  static const Color glassDarkHighlight = Color(0x26FFFFFF); // 15% white
+  static const Color glassDarkShadow = Color(0x40000000); // 25% black
 
   // ── Reader Specific ──────────────────────────
-  static const Color readerPaperLight     = Color(0xFFFFFDF8);   // warm off-white
-  static const Color readerPaperDark      = Color(0xFF161614);   // warm dark
-  static const Color readerInkLight       = Color(0xFF1C1917);   // rich ink
-  static const Color readerInkDark        = Color(0xFFE7E5E4);   // soft paper white
-  static const Color readerDropCapLight   = Color(0xFF1C4ED8);
-  static const Color readerDropCapDark    = Color(0xFF60A5FA);
+  static const Color readerPaperLight = Color(0xFFFFFDF8); // warm off-white
+  static const Color readerPaperDark = Color(0xFF161614); // warm dark
+  static const Color readerInkLight = Color(0xFF1C1917); // rich ink
+  static const Color readerInkDark = Color(0xFFE7E5E4); // soft paper white
+  static const Color readerDropCapLight = Color(0xFF1C4ED8);
+  static const Color readerDropCapDark = Color(0xFF60A5FA);
 }
 
 // ─────────────────────────────────────────────
@@ -73,35 +75,35 @@ abstract final class AppColors {
 // ─────────────────────────────────────────────
 
 abstract final class AppSpacing {
-  static const double xxs  = 2.0;
-  static const double xs   = 4.0;
-  static const double sm   = 8.0;
-  static const double md   = 12.0;
+  static const double xxs = 2.0;
+  static const double xs = 4.0;
+  static const double sm = 8.0;
+  static const double md = 12.0;
   static const double base = 16.0;
-  static const double lg   = 20.0;
-  static const double xl   = 24.0;
-  static const double xxl  = 32.0;
+  static const double lg = 20.0;
+  static const double xl = 24.0;
+  static const double xxl = 32.0;
   static const double xxxl = 40.0;
   static const double huge = 48.0;
-  static const double max  = 64.0;
+  static const double max = 64.0;
 
   // ── Reader Specific ──────────────────────────
-  static const double readerHorizontal    = 20.0;
-  static const double readerVertical      = 24.0;
-  static const double readerParagraphGap  = 16.0;
-  static const double readerLineHeight    = 1.75;
-  static const double readerSectionGap    = 32.0;
+  static const double readerHorizontal = 20.0;
+  static const double readerVertical = 24.0;
+  static const double readerParagraphGap = 16.0;
+  static const double readerLineHeight = 1.75;
+  static const double readerSectionGap = 32.0;
 
   // ── Component Specific ───────────────────────
-  static const double cardPaddingH        = 16.0;
-  static const double cardPaddingV        = 14.0;
-  static const double listItemH           = 16.0;
-  static const double listItemV           = 12.0;
-  static const double bottomBarH          = 24.0;
-  static const double bottomBarV          = 12.0;
-  static const double modalHandleW        = 36.0;
-  static const double modalHandleH        = 4.0;
-  static const double modalHandleTopGap   = 12.0;
+  static const double cardPaddingH = 16.0;
+  static const double cardPaddingV = 14.0;
+  static const double listItemH = 16.0;
+  static const double listItemV = 12.0;
+  static const double bottomBarH = 24.0;
+  static const double bottomBarV = 12.0;
+  static const double modalHandleW = 36.0;
+  static const double modalHandleH = 4.0;
+  static const double modalHandleTopGap = 12.0;
 }
 
 // ─────────────────────────────────────────────
@@ -109,37 +111,46 @@ abstract final class AppSpacing {
 // ─────────────────────────────────────────────
 
 abstract final class AppRadius {
-  static const double xs    = 6.0;
-  static const double sm    = 10.0;
-  static const double md    = 14.0;
-  static const double base  = 16.0;
-  static const double lg    = 20.0;
-  static const double xl    = 24.0;
-  static const double xxl   = 28.0;
-  static const double xxxl  = 32.0;
-  static const double pill  = 100.0;
+  static const double xs = 6.0;
+  static const double sm = 10.0;
+  static const double md = 14.0;
+  static const double base = 16.0;
+  static const double lg = 20.0;
+  static const double xl = 24.0;
+  static const double xxl = 28.0;
+  static const double xxxl = 32.0;
+  static const double pill = 100.0;
 
   // ── Radii Objects ────────────────────────────
-  static BorderRadius get xsAll    => BorderRadius.circular(xs);
-  static BorderRadius get smAll    => BorderRadius.circular(sm);
-  static BorderRadius get mdAll    => BorderRadius.circular(md);
-  static BorderRadius get baseAll  => BorderRadius.circular(base);
-  static BorderRadius get lgAll    => BorderRadius.circular(lg);
-  static BorderRadius get xlAll    => BorderRadius.circular(xl);
-  static BorderRadius get xxlAll   => BorderRadius.circular(xxl);
-  static BorderRadius get xxxlAll  => BorderRadius.circular(xxxl);
-  static BorderRadius get pillAll  => BorderRadius.circular(pill);
+  static BorderRadius get xsAll => BorderRadius.circular(xs);
+  static BorderRadius get smAll => BorderRadius.circular(sm);
+  static BorderRadius get mdAll => BorderRadius.circular(md);
+  static BorderRadius get baseAll => BorderRadius.circular(base);
+  static BorderRadius get lgAll => BorderRadius.circular(lg);
+  static BorderRadius get xlAll => BorderRadius.circular(xl);
+  static BorderRadius get xxlAll => BorderRadius.circular(xxl);
+  static BorderRadius get xxxlAll => BorderRadius.circular(xxxl);
+  static BorderRadius get pillAll => BorderRadius.circular(pill);
 
   // ── Component Specific ───────────────────────
-  static BorderRadius get card     => BorderRadius.circular(xxl);
-  static BorderRadius get button   => BorderRadius.circular(xl);
-  static BorderRadius get chip     => BorderRadius.circular(pill);
-  static BorderRadius get modal    => BorderRadius.only(
-    topLeft: Radius.circular(xxxl),
-    topRight: Radius.circular(xxxl),
-  );
+  static BorderRadius get card => BorderRadius.circular(xxl);
+  static BorderRadius get button => BorderRadius.circular(xl);
+  static BorderRadius get chip => BorderRadius.circular(pill);
+  static BorderRadius get modal => BorderRadius.only(
+        topLeft: Radius.circular(xxxl),
+        topRight: Radius.circular(xxxl),
+      );
+  static BorderRadius get dialog => BorderRadius.circular(xxl);
   static BorderRadius get textField => BorderRadius.circular(md);
-  static BorderRadius get appBar    => BorderRadius.zero;
+  static BorderRadius get appBar => BorderRadius.zero;
+}
+
+abstract final class AppReader {
+  static const double sideMargin = AppSpacing.readerHorizontal;
+  static const double baseFontSize = 16.0;
+  static const double titleFontSize = 22.0;
+  static const double lineHeight = AppSpacing.readerLineHeight;
+  static const double paragraphSpacing = AppSpacing.readerParagraphGap;
 }
 
 // ─────────────────────────────────────────────
@@ -147,13 +158,13 @@ abstract final class AppRadius {
 // ─────────────────────────────────────────────
 
 abstract final class AppBlur {
-  static const double none    = 0.0;
-  static const double xs      = 4.0;    // subtle background hint
-  static const double sm      = 10.0;   // light overlay
-  static const double md      = 20.0;   // standard glass
-  static const double lg      = 30.0;   // deep glass (navigation bars)
-  static const double xl      = 40.0;   // heavy modals
-  static const double xxl     = 60.0;   // full screen overlays
+  static const double none = 0.0;
+  static const double xs = 4.0; // subtle background hint
+  static const double sm = 10.0; // light overlay
+  static const double md = 20.0; // standard glass
+  static const double lg = 30.0; // deep glass (navigation bars)
+  static const double xl = 40.0; // heavy modals
+  static const double xxl = 60.0; // full screen overlays
 }
 
 // ─────────────────────────────────────────────
@@ -236,7 +247,7 @@ abstract final class AppTypography {
     fontSize: 17,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.1,
-    height: 1.75,                        // generous for legal reading
+    height: 1.75, // generous for legal reading
     wordSpacing: 0.2,
   );
 
@@ -336,6 +347,14 @@ abstract final class AppTypography {
     letterSpacing: 0.1,
     height: 1.7,
   );
+
+  static const TextStyle legalCaption = TextStyle(
+    fontFamily: 'Georgia',
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.05,
+    height: 1.5,
+  );
 }
 
 // ─────────────────────────────────────────────
@@ -344,29 +363,29 @@ abstract final class AppTypography {
 
 abstract final class AppAnimation {
   // ── Durations ────────────────────────────────
-  static const Duration instant   = Duration(milliseconds: 100);
-  static const Duration fast      = Duration(milliseconds: 180);
-  static const Duration standard  = Duration(milliseconds: 280);
-  static const Duration medium    = Duration(milliseconds: 380);
-  static const Duration slow      = Duration(milliseconds: 500);
-  static const Duration verySlow  = Duration(milliseconds: 700);
-  static const Duration spring    = Duration(milliseconds: 600);
+  static const Duration instant = Duration(milliseconds: 100);
+  static const Duration fast = Duration(milliseconds: 180);
+  static const Duration standard = Duration(milliseconds: 280);
+  static const Duration medium = Duration(milliseconds: 380);
+  static const Duration slow = Duration(milliseconds: 500);
+  static const Duration verySlow = Duration(milliseconds: 700);
+  static const Duration spring = Duration(milliseconds: 600);
 
   // ── Curves ───────────────────────────────────
-  static const Curve easeIn       = Curves.easeIn;
-  static const Curve easeOut      = Curves.easeOut;
-  static const Curve easeInOut    = Curves.easeInOutCubic;
-  static const Curve decelerate   = Curves.decelerate;
-  static const Curve elasticOut   = Curves.elasticOut;
-  static const Curve bounceOut    = Curves.bounceOut;
+  static const Curve easeIn = Curves.easeIn;
+  static const Curve easeOut = Curves.easeOut;
+  static const Curve easeInOut = Curves.easeInOutCubic;
+  static const Curve decelerate = Curves.decelerate;
+  static const Curve elasticOut = Curves.elasticOut;
+  static const Curve bounceOut = Curves.bounceOut;
 
   // ── iOS-style spring ─────────────────────────
-  static const Curve springCurve  = Curves.easeOutCubic;
-  static const Curve modalCurve   = Curves.easeOutQuint;
+  static const Curve springCurve = Curves.easeOutCubic;
+  static const Curve modalCurve = Curves.easeOutQuint;
 
   // ── Scale values (press interactions) ────────
-  static const double pressScale  = 0.97;
-  static const double tapScale    = 0.95;
+  static const double pressScale = 0.97;
+  static const double tapScale = 0.95;
   static const double bounceScale = 1.03;
 }
 
@@ -377,101 +396,109 @@ abstract final class AppAnimation {
 abstract final class AppShadows {
   // ── Light Theme Shadows ───────────────────────
   static List<BoxShadow> get lightSm => [
-    BoxShadow(
-      color: const Color(0x0D000000),
-      blurRadius: 8,
-      offset: const Offset(0, 2),
-    ),
-  ];
+        BoxShadow(
+          color: const Color(0x0D000000),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
+        ),
+      ];
 
   static List<BoxShadow> get lightMd => [
-    BoxShadow(
-      color: const Color(0x14000000),
-      blurRadius: 16,
-      offset: const Offset(0, 4),
-    ),
-    BoxShadow(
-      color: const Color(0x08000000),
-      blurRadius: 4,
-      offset: const Offset(0, 1),
-    ),
-  ];
+        BoxShadow(
+          color: const Color(0x14000000),
+          blurRadius: 16,
+          offset: const Offset(0, 4),
+        ),
+        BoxShadow(
+          color: const Color(0x08000000),
+          blurRadius: 4,
+          offset: const Offset(0, 1),
+        ),
+      ];
 
   static List<BoxShadow> get lightLg => [
-    BoxShadow(
-      color: const Color(0x1A000000),
-      blurRadius: 32,
-      offset: const Offset(0, 8),
-    ),
-    BoxShadow(
-      color: const Color(0x0A000000),
-      blurRadius: 8,
-      offset: const Offset(0, 2),
-    ),
-  ];
+        BoxShadow(
+          color: const Color(0x1A000000),
+          blurRadius: 32,
+          offset: const Offset(0, 8),
+        ),
+        BoxShadow(
+          color: const Color(0x0A000000),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
+        ),
+      ];
 
   static List<BoxShadow> get lightGlass => [
-    BoxShadow(
-      color: const Color(0x14000000),
-      blurRadius: 20,
-      offset: const Offset(0, 4),
-    ),
-    BoxShadow(
-      color: const Color(0x40FFFFFF),
-      blurRadius: 1,
-      offset: const Offset(0, 1),
-      spreadRadius: -1,
-    ),
-  ];
+        BoxShadow(
+          color: const Color(0x14000000),
+          blurRadius: 20,
+          offset: const Offset(0, 4),
+        ),
+        BoxShadow(
+          color: const Color(0x40FFFFFF),
+          blurRadius: 1,
+          offset: const Offset(0, 1),
+          spreadRadius: -1,
+        ),
+      ];
+
+  static List<BoxShadow> get accentGlow => [
+        BoxShadow(
+          color: AppColors.accentMuted,
+          blurRadius: 24,
+          offset: const Offset(0, 8),
+        ),
+      ];
 
   // ── Dark Theme Shadows ────────────────────────
   static List<BoxShadow> get darkSm => [
-    BoxShadow(
-      color: const Color(0x33000000),
-      blurRadius: 8,
-      offset: const Offset(0, 2),
-    ),
-  ];
+        BoxShadow(
+          color: const Color(0x33000000),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
+        ),
+      ];
 
   static List<BoxShadow> get darkMd => [
-    BoxShadow(
-      color: const Color(0x4D000000),
-      blurRadius: 16,
-      offset: const Offset(0, 4),
-    ),
-    BoxShadow(
-      color: const Color(0x26000000),
-      blurRadius: 4,
-      offset: const Offset(0, 1),
-    ),
-  ];
+        BoxShadow(
+          color: const Color(0x4D000000),
+          blurRadius: 16,
+          offset: const Offset(0, 4),
+        ),
+        BoxShadow(
+          color: const Color(0x26000000),
+          blurRadius: 4,
+          offset: const Offset(0, 1),
+        ),
+      ];
 
   static List<BoxShadow> get darkLg => [
-    BoxShadow(
-      color: const Color(0x66000000),
-      blurRadius: 32,
-      offset: const Offset(0, 8),
-    ),
-    BoxShadow(
-      color: const Color(0x33000000),
-      blurRadius: 8,
-      offset: const Offset(0, 2),
-    ),
-  ];
+        BoxShadow(
+          color: const Color(0x66000000),
+          blurRadius: 32,
+          offset: const Offset(0, 8),
+        ),
+        BoxShadow(
+          color: const Color(0x33000000),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
+        ),
+      ];
 
   static List<BoxShadow> get darkGlass => [
-    BoxShadow(
-      color: const Color(0x59000000),
-      blurRadius: 20,
-      offset: const Offset(0, 4),
-    ),
-    BoxShadow(
-      color: const Color(0x26FFFFFF),
-      blurRadius: 1,
-      offset: const Offset(0, 1),
-      spreadRadius: -1,
-    ),
-  ];
+        BoxShadow(
+          color: const Color(0x59000000),
+          blurRadius: 20,
+          offset: const Offset(0, 4),
+        ),
+        BoxShadow(
+          color: const Color(0x26FFFFFF),
+          blurRadius: 1,
+          offset: const Offset(0, 1),
+          spreadRadius: -1,
+        ),
+      ];
 }
 
 // ─────────────────────────────────────────────
@@ -501,117 +528,117 @@ class GlassConfig {
 
   // ── Light presets ─────────────────────────────
   static GlassConfig lightCard({BorderRadius? radius}) => GlassConfig(
-    blurSigmaX: AppBlur.md,
-    blurSigmaY: AppBlur.md,
-    tintColor: AppColors.glassLightBase,
-    borderColor: AppColors.glassLightBorder,
-    borderWidth: 0.5,
-    borderRadius: radius ?? AppRadius.card,
-    shadows: AppShadows.lightGlass,
-    highlightGradient: const LinearGradient(
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-      colors: [Color(0x40FFFFFF), Color(0x00FFFFFF)],
-    ),
-  );
+        blurSigmaX: AppBlur.md,
+        blurSigmaY: AppBlur.md,
+        tintColor: AppColors.glassLightBase,
+        borderColor: AppColors.glassLightBorder,
+        borderWidth: 0.5,
+        borderRadius: radius ?? AppRadius.card,
+        shadows: AppShadows.lightGlass,
+        highlightGradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0x40FFFFFF), Color(0x00FFFFFF)],
+        ),
+      );
 
   static GlassConfig lightNavBar() => GlassConfig(
-    blurSigmaX: AppBlur.lg,
-    blurSigmaY: AppBlur.lg,
-    tintColor: const Color(0xE6FFFFFF),
-    borderColor: const Color(0x1AC6C6C8),
-    borderWidth: 0.5,
-    borderRadius: BorderRadius.zero,
-    shadows: [
-      BoxShadow(
-        color: const Color(0x0A000000),
-        blurRadius: 1,
-        offset: const Offset(0, 1),
-      ),
-    ],
-  );
+        blurSigmaX: AppBlur.lg,
+        blurSigmaY: AppBlur.lg,
+        tintColor: const Color(0xE6FFFFFF),
+        borderColor: const Color(0x1AC6C6C8),
+        borderWidth: 0.5,
+        borderRadius: BorderRadius.zero,
+        shadows: [
+          BoxShadow(
+            color: const Color(0x0A000000),
+            blurRadius: 1,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      );
 
   static GlassConfig lightModal() => GlassConfig(
-    blurSigmaX: AppBlur.xl,
-    blurSigmaY: AppBlur.xl,
-    tintColor: const Color(0xF0FFFFFF),
-    borderColor: AppColors.glassLightBorder,
-    borderWidth: 0.5,
-    borderRadius: AppRadius.modal,
-    shadows: AppShadows.lightLg,
-    highlightGradient: const LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [Color(0x33FFFFFF), Color(0x00FFFFFF)],
-    ),
-  );
+        blurSigmaX: AppBlur.xl,
+        blurSigmaY: AppBlur.xl,
+        tintColor: const Color(0xF0FFFFFF),
+        borderColor: AppColors.glassLightBorder,
+        borderWidth: 0.5,
+        borderRadius: AppRadius.modal,
+        shadows: AppShadows.lightLg,
+        highlightGradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0x33FFFFFF), Color(0x00FFFFFF)],
+        ),
+      );
 
   static GlassConfig lightButton({BorderRadius? radius}) => GlassConfig(
-    blurSigmaX: AppBlur.sm,
-    blurSigmaY: AppBlur.sm,
-    tintColor: const Color(0xCCFFFFFF),
-    borderColor: const Color(0x40FFFFFF),
-    borderWidth: 0.5,
-    borderRadius: radius ?? AppRadius.button,
-    shadows: AppShadows.lightSm,
-  );
+        blurSigmaX: AppBlur.sm,
+        blurSigmaY: AppBlur.sm,
+        tintColor: const Color(0xCCFFFFFF),
+        borderColor: const Color(0x40FFFFFF),
+        borderWidth: 0.5,
+        borderRadius: radius ?? AppRadius.button,
+        shadows: AppShadows.lightSm,
+      );
 
   // ── Dark presets ──────────────────────────────
   static GlassConfig darkCard({BorderRadius? radius}) => GlassConfig(
-    blurSigmaX: AppBlur.md,
-    blurSigmaY: AppBlur.md,
-    tintColor: AppColors.glassDarkBase,
-    borderColor: AppColors.glassDarkBorder,
-    borderWidth: 0.5,
-    borderRadius: radius ?? AppRadius.card,
-    shadows: AppShadows.darkGlass,
-    highlightGradient: const LinearGradient(
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-      colors: [Color(0x1AFFFFFF), Color(0x00FFFFFF)],
-    ),
-  );
+        blurSigmaX: AppBlur.md,
+        blurSigmaY: AppBlur.md,
+        tintColor: AppColors.glassDarkBase,
+        borderColor: AppColors.glassDarkBorder,
+        borderWidth: 0.5,
+        borderRadius: radius ?? AppRadius.card,
+        shadows: AppShadows.darkGlass,
+        highlightGradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0x1AFFFFFF), Color(0x00FFFFFF)],
+        ),
+      );
 
   static GlassConfig darkNavBar() => GlassConfig(
-    blurSigmaX: AppBlur.lg,
-    blurSigmaY: AppBlur.lg,
-    tintColor: const Color(0xCC1C1C1E),
-    borderColor: const Color(0x1AFFFFFF),
-    borderWidth: 0.5,
-    borderRadius: BorderRadius.zero,
-    shadows: [
-      BoxShadow(
-        color: const Color(0x40000000),
-        blurRadius: 1,
-        offset: const Offset(0, -1),
-      ),
-    ],
-  );
+        blurSigmaX: AppBlur.lg,
+        blurSigmaY: AppBlur.lg,
+        tintColor: const Color(0xCC1C1C1E),
+        borderColor: const Color(0x1AFFFFFF),
+        borderWidth: 0.5,
+        borderRadius: BorderRadius.zero,
+        shadows: [
+          BoxShadow(
+            color: const Color(0x40000000),
+            blurRadius: 1,
+            offset: const Offset(0, -1),
+          ),
+        ],
+      );
 
   static GlassConfig darkModal() => GlassConfig(
-    blurSigmaX: AppBlur.xl,
-    blurSigmaY: AppBlur.xl,
-    tintColor: const Color(0xF01C1C1E),
-    borderColor: AppColors.glassDarkBorder,
-    borderWidth: 0.5,
-    borderRadius: AppRadius.modal,
-    shadows: AppShadows.darkLg,
-    highlightGradient: const LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [Color(0x1AFFFFFF), Color(0x00FFFFFF)],
-    ),
-  );
+        blurSigmaX: AppBlur.xl,
+        blurSigmaY: AppBlur.xl,
+        tintColor: const Color(0xF01C1C1E),
+        borderColor: AppColors.glassDarkBorder,
+        borderWidth: 0.5,
+        borderRadius: AppRadius.modal,
+        shadows: AppShadows.darkLg,
+        highlightGradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0x1AFFFFFF), Color(0x00FFFFFF)],
+        ),
+      );
 
   static GlassConfig darkButton({BorderRadius? radius}) => GlassConfig(
-    blurSigmaX: AppBlur.sm,
-    blurSigmaY: AppBlur.sm,
-    tintColor: const Color(0x4DFFFFFF),
-    borderColor: const Color(0x26FFFFFF),
-    borderWidth: 0.5,
-    borderRadius: radius ?? AppRadius.button,
-    shadows: AppShadows.darkSm,
-  );
+        blurSigmaX: AppBlur.sm,
+        blurSigmaY: AppBlur.sm,
+        tintColor: const Color(0x4DFFFFFF),
+        borderColor: const Color(0x26FFFFFF),
+        borderWidth: 0.5,
+        borderRadius: radius ?? AppRadius.button,
+        shadows: AppShadows.darkSm,
+      );
 }
 
 // ─────────────────────────────────────────────
@@ -646,7 +673,8 @@ class GlassContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final brightness = Theme.of(context).brightness;
     final dark = isDark || brightness == Brightness.dark;
-    final cfg = config ?? (dark ? GlassConfig.darkCard() : GlassConfig.lightCard());
+    final cfg =
+        config ?? (dark ? GlassConfig.darkCard() : GlassConfig.lightCard());
 
     Widget glass = Container(
       width: width,
@@ -791,9 +819,7 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     final tint = backgroundColor ??
         (dark ? const Color(0xCC1C1C1E) : const Color(0xE6FFFFFF));
-    final border = dark
-        ? const Color(0x1AFFFFFF)
-        : const Color(0x1AC6C6C8);
+    final border = dark ? const Color(0x1AFFFFFF) : const Color(0x1AC6C6C8);
 
     return ClipRect(
       child: BackdropFilter(
@@ -818,9 +844,8 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
             elevation: 0,
             backgroundColor: Colors.transparent,
             surfaceTintColor: Colors.transparent,
-            systemOverlayStyle: dark
-                ? SystemUiOverlayStyle.light
-                : SystemUiOverlayStyle.dark,
+            systemOverlayStyle:
+                dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
           ),
         ),
       ),
@@ -852,9 +877,8 @@ class GlassNavigationBar extends StatelessWidget {
     final dark = brightness == Brightness.dark;
 
     final tint = dark ? const Color(0xCC1C1C1E) : const Color(0xE6FFFFFF);
-    final borderColor = dark
-        ? const Color(0x1AFFFFFF)
-        : const Color(0x1AC6C6C8);
+    final borderColor =
+        dark ? const Color(0x1AFFFFFF) : const Color(0x1AC6C6C8);
 
     return ClipRect(
       child: BackdropFilter(
@@ -874,11 +898,9 @@ class GlassNavigationBar extends StatelessWidget {
             surfaceTintColor: Colors.transparent,
             elevation: 0,
             shadowColor: Colors.transparent,
-            indicatorColor: dark
-                ? AppColors.accentMuted
-                : AppColors.accentMuted,
-            labelBehavior:
-                NavigationDestinationLabelBehavior.alwaysShow,
+            indicatorColor:
+                dark ? AppColors.accentMuted : AppColors.accentMuted,
+            labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
           ),
         ),
       ),
@@ -1092,6 +1114,7 @@ class GlassSettingsTile extends StatelessWidget {
   final bool isFirst;
   final bool isLast;
   final bool showDivider;
+  final bool isDestructive;
 
   const GlassSettingsTile({
     super.key,
@@ -1105,6 +1128,7 @@ class GlassSettingsTile extends StatelessWidget {
     this.isFirst = false,
     this.isLast = false,
     this.showDivider = true,
+    this.isDestructive = false,
   });
 
   @override
@@ -1125,9 +1149,7 @@ class GlassSettingsTile extends StatelessWidget {
         filter: ImageFilter.blur(sigmaX: AppBlur.md, sigmaY: AppBlur.md),
         child: Container(
           decoration: BoxDecoration(
-            color: dark
-                ? const Color(0x991E1E1E)
-                : const Color(0xCCFFFFFF),
+            color: dark ? const Color(0x991E1E1E) : const Color(0xCCFFFFFF),
             borderRadius: borderRadius,
           ),
           child: _GlassTapEffect(
@@ -1292,9 +1314,7 @@ class GlassBottomSheet extends StatelessWidget {
           filter: ImageFilter.blur(sigmaX: AppBlur.xl, sigmaY: AppBlur.xl),
           child: Container(
             decoration: BoxDecoration(
-              color: dark
-                  ? const Color(0xF01C1C1E)
-                  : const Color(0xF0FFFFFF),
+              color: dark ? const Color(0xF01C1C1E) : const Color(0xF0FFFFFF),
               borderRadius: AppRadius.modal,
               border: Border.all(
                 color: dark
@@ -1349,27 +1369,30 @@ class GlassBottomSheet extends StatelessWidget {
 // ─────────────────────────────────────────────
 
 abstract final class AppTheme {
+  static ThemeData get lightTheme => light;
+  static ThemeData get darkTheme => dark;
+
   // ── Light Theme ───────────────────────────────
   static ThemeData get light {
     const colorScheme = ColorScheme.light(
-      primary:          AppColors.accent,
-      onPrimary:        Color(0xFFFFFFFF),
+      primary: AppColors.accent,
+      onPrimary: Color(0xFFFFFFFF),
       primaryContainer: AppColors.accentMuted,
       onPrimaryContainer: AppColors.accentDark,
-      secondary:        AppColors.gold,
-      onSecondary:      Color(0xFFFFFFFF),
+      secondary: AppColors.gold,
+      onSecondary: Color(0xFFFFFFFF),
       secondaryContainer: AppColors.goldMuted,
       onSecondaryContainer: Color(0xFF6B4800),
-      surface:          AppColors.lightBackground,
-      onSurface:        AppColors.lightPrimaryText,
+      surface: AppColors.lightBackground,
+      onSurface: AppColors.lightPrimaryText,
       surfaceContainerHighest: AppColors.lightSecondaryBg,
       onSurfaceVariant: AppColors.lightSecondaryText,
-      outline:          AppColors.lightSeparator,
-      outlineVariant:   Color(0x1AC6C6C8),
-      error:            AppColors.error,
-      onError:          Color(0xFFFFFFFF),
-      background:       AppColors.lightBackground,
-      onBackground:     AppColors.lightPrimaryText,
+      outline: AppColors.lightSeparator,
+      outlineVariant: Color(0x1AC6C6C8),
+      error: AppColors.error,
+      onError: Color(0xFFFFFFFF),
+      background: AppColors.lightBackground,
+      onBackground: AppColors.lightPrimaryText,
     );
 
     return ThemeData(
@@ -1667,24 +1690,24 @@ abstract final class AppTheme {
   // ── Dark Theme ────────────────────────────────
   static ThemeData get dark {
     const colorScheme = ColorScheme.dark(
-      primary:          AppColors.accentLight,
-      onPrimary:        Color(0xFFFFFFFF),
+      primary: AppColors.accentLight,
+      onPrimary: Color(0xFFFFFFFF),
       primaryContainer: AppColors.accentMuted,
       onPrimaryContainer: AppColors.accentLight,
-      secondary:        AppColors.gold,
-      onSecondary:      Color(0xFF000000),
+      secondary: AppColors.gold,
+      onSecondary: Color(0xFF000000),
       secondaryContainer: AppColors.goldMuted,
       onSecondaryContainer: AppColors.gold,
-      surface:          AppColors.darkBackground,
-      onSurface:        AppColors.darkPrimaryText,
+      surface: AppColors.darkBackground,
+      onSurface: AppColors.darkPrimaryText,
       surfaceContainerHighest: AppColors.darkSecondaryBg,
       onSurfaceVariant: AppColors.darkSecondaryText,
-      outline:          AppColors.darkSeparator,
-      outlineVariant:   Color(0x33545458),
-      error:            AppColors.error,
-      onError:          Color(0xFFFFFFFF),
-      background:       AppColors.darkBackground,
-      onBackground:     AppColors.darkPrimaryText,
+      outline: AppColors.darkSeparator,
+      outlineVariant: Color(0x33545458),
+      error: AppColors.error,
+      onError: Color(0xFFFFFFFF),
+      background: AppColors.darkBackground,
+      onBackground: AppColors.darkPrimaryText,
     );
 
     return ThemeData(
@@ -1984,20 +2007,20 @@ abstract final class AppTheme {
     required Color secondary,
   }) =>
       TextTheme(
-        displayLarge:   AppTypography.displayLarge.copyWith(color: primary),
-        displayMedium:  AppTypography.displayMedium.copyWith(color: primary),
-        displaySmall:   AppTypography.displaySmall.copyWith(color: primary),
-        headlineLarge:  AppTypography.headlineLarge.copyWith(color: primary),
+        displayLarge: AppTypography.displayLarge.copyWith(color: primary),
+        displayMedium: AppTypography.displayMedium.copyWith(color: primary),
+        displaySmall: AppTypography.displaySmall.copyWith(color: primary),
+        headlineLarge: AppTypography.headlineLarge.copyWith(color: primary),
         headlineMedium: AppTypography.headlineMedium.copyWith(color: primary),
-        headlineSmall:  AppTypography.headlineSmall.copyWith(color: primary),
-        titleLarge:     AppTypography.titleLarge.copyWith(color: primary),
-        titleMedium:    AppTypography.titleMedium.copyWith(color: primary),
-        titleSmall:     AppTypography.titleSmall.copyWith(color: secondary),
-        bodyLarge:      AppTypography.bodyLarge.copyWith(color: primary),
-        bodyMedium:     AppTypography.bodyMedium.copyWith(color: primary),
-        bodySmall:      AppTypography.bodySmall.copyWith(color: secondary),
-        labelLarge:     AppTypography.labelLarge.copyWith(color: primary),
-        labelMedium:    AppTypography.labelMedium.copyWith(color: secondary),
-        labelSmall:     AppTypography.labelSmall.copyWith(color: secondary),
+        headlineSmall: AppTypography.headlineSmall.copyWith(color: primary),
+        titleLarge: AppTypography.titleLarge.copyWith(color: primary),
+        titleMedium: AppTypography.titleMedium.copyWith(color: primary),
+        titleSmall: AppTypography.titleSmall.copyWith(color: secondary),
+        bodyLarge: AppTypography.bodyLarge.copyWith(color: primary),
+        bodyMedium: AppTypography.bodyMedium.copyWith(color: primary),
+        bodySmall: AppTypography.bodySmall.copyWith(color: secondary),
+        labelLarge: AppTypography.labelLarge.copyWith(color: primary),
+        labelMedium: AppTypography.labelMedium.copyWith(color: secondary),
+        labelSmall: AppTypography.labelSmall.copyWith(color: secondary),
       );
 }

@@ -1,27 +1,26 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
+import '../../../data/models/legal_models.dart';
 
 // ─────────────────────────────────────────────
 // MARK: — REPOSITORY EXCEPTIONS
 // ─────────────────────────────────────────────
 
 class ActsRepositoryException implements Exception {
-  final String  message;
+  final String message;
   final String? path;
   final Object? cause;
   const ActsRepositoryException({required this.message, this.path, this.cause});
 
   @override
-  String toString() =>
-      'ActsRepositoryException: $message'
-      '${path  != null ? ' [path: $path]'   : ''}'
+  String toString() => 'ActsRepositoryException: $message'
+      '${path != null ? ' [path: $path]' : ''}'
       '${cause != null ? ' caused by: $cause' : ''}';
 }
 
 class ActsNotFoundException extends ActsRepositoryException {
-  const ActsNotFoundException(String id)
-      : super(message: 'Act not found: $id');
+  const ActsNotFoundException(String id) : super(message: 'Act not found: $id');
 }
 
 class ActsParseException extends ActsRepositoryException {
@@ -39,12 +38,12 @@ class ActsLoadException extends ActsRepositoryException {
 // ─────────────────────────────────────────────
 
 abstract class ActsRepository {
-  Future<List<ActModel>>     getAllActs();
-  Future<ActModel?>          getActById(String id);
+  Future<List<ActModel>> getAllActs();
+  Future<ActModel?> getActById(String id);
   Future<List<ChapterModel>> getChapters(String actId);
   Future<List<SectionModel>> getSections(String actId, String chapterId);
-  Future<SectionModel?>      getSection(String actId, String sectionId);
-  Future<void>               clearCache();
+  Future<SectionModel?> getSection(String actId, String sectionId);
+  Future<void> clearCache();
 }
 
 // ─────────────────────────────────────────────
@@ -81,12 +80,12 @@ class _ActsManifest {
 
 class ActsRepositoryImpl implements ActsRepository {
   static const String _manifestPath = 'assets/data/manifest.json';
-  static const String _tag          = 'ActsRepositoryImpl';
+  static const String _tag = 'ActsRepositoryImpl';
 
   // ── In-memory cache ───────────────────────────
-  _ActsManifest?              _manifest;
+  _ActsManifest? _manifest;
   final Map<String, ActModel> _actCache = {};
-  List<ActModel>?             _allActsCache;
+  List<ActModel>? _allActsCache;
 
   // ─────────────────────────────────────────────
   // MARK: — MANIFEST
@@ -96,10 +95,11 @@ class ActsRepositoryImpl implements ActsRepository {
     if (_manifest != null) return _manifest!;
 
     try {
-      final raw  = await rootBundle.loadString(_manifestPath);
+      final raw = await rootBundle.loadString(_manifestPath);
       final json = jsonDecode(raw) as Map<String, dynamic>;
-      _manifest  = _ActsManifest.fromJson(json);
-      debugPrint('[$_tag] Manifest loaded: ${_manifest!.actPaths.length} acts.');
+      _manifest = _ActsManifest.fromJson(json);
+      debugPrint(
+          '[$_tag] Manifest loaded: ${_manifest!.actPaths.length} acts.');
     } catch (_) {
       debugPrint('[$_tag] No manifest found. Using default paths.');
       _manifest = _ActsManifest.defaults();
@@ -152,7 +152,7 @@ class ActsRepositoryImpl implements ActsRepository {
     if (_allActsCache != null) return List.unmodifiable(_allActsCache!);
 
     final manifest = await _getManifest();
-    final acts     = <ActModel>[];
+    final acts = <ActModel>[];
 
     await Future.wait(
       manifest.actPaths.map((path) async {
@@ -220,15 +220,15 @@ class ActsRepositoryImpl implements ActsRepository {
   // ─────────────────────────────────────────────
 
   @override
-  Future<List<SectionModel>> getSections(
-      String actId, String chapterId) async {
+  Future<List<SectionModel>> getSections(String actId, String chapterId) async {
     final act = await getActById(actId);
 
     if (act == null) throw ActsNotFoundException(actId);
 
     try {
       final chapter = act.chapters.firstWhere((c) => c.id == chapterId);
-      debugPrint('[$_tag] getSections($actId, $chapterId): ${chapter.sections.length} sections.');
+      debugPrint(
+          '[$_tag] getSections($actId, $chapterId): ${chapter.sections.length} sections.');
       return List.unmodifiable(chapter.sections);
     } on StateError {
       debugPrint('[$_tag] Chapter not found: $chapterId in act $actId');
@@ -248,7 +248,8 @@ class ActsRepositoryImpl implements ActsRepository {
     for (final chapter in act.chapters) {
       try {
         final section = chapter.sections.firstWhere((s) => s.id == sectionId);
-        debugPrint('[$_tag] getSection($sectionId): found in chapter ${chapter.id}');
+        debugPrint(
+            '[$_tag] getSection($sectionId): found in chapter ${chapter.id}');
         return section;
       } on StateError {
         continue;
@@ -265,7 +266,7 @@ class ActsRepositoryImpl implements ActsRepository {
 
   @override
   Future<void> clearCache() async {
-    _manifest     = null;
+    _manifest = null;
     _allActsCache = null;
     _actCache.clear();
     debugPrint('[$_tag] Cache cleared.');
@@ -284,9 +285,6 @@ class ActsRepositoryImpl implements ActsRepository {
 // ChapterModel = Chapter from legal_models.dart
 // SectionModel = Section from legal_models.dart
 
-typedef ActModel     = Act;
+typedef ActModel = Act;
 typedef ChapterModel = Chapter;
 typedef SectionModel = Section;
-
-// Import at top of file:
-import '../../../data/models/legal_models.dart';

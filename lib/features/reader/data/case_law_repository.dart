@@ -13,4 +13,7 @@ abstract class CaseLawRepository {
   /// Returns the case law for the given [id].
   /// Returns null if not found.
   Future<CaseLaw?> getCaseLawById(String id);
+
+  /// Returns every available case law, primarily to warm repository caches.
+  Future<List<CaseLaw>> getAllCaseLaws();
 }

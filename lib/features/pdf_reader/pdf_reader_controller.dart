@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../core/services/pdf_progress_service.dart';
 import '../../data/models/legal_models.dart';
+import '../notes/pdf_reader_screen.dart' show PdfDocumentModel;
 
 // ─────────────────────────────────────────────
 // MARK: — STATUS ENUM
@@ -22,59 +23,60 @@ enum PdfReaderStatus { idle, loading, loaded, error }
 
 class PdfReaderState {
   final PdfDocumentModel? document;
-  final int               currentPage;
-  final double            zoomLevel;
-  final bool              isToolbarVisible;
-  final bool              isDocumentBookmarked;
-  final Set<int>          bookmarkedPages;
-  final PdfReaderStatus   status;
-  final String?           error;
+  final int currentPage;
+  final double zoomLevel;
+  final bool isToolbarVisible;
+  final bool isDocumentBookmarked;
+  final Set<int> bookmarkedPages;
+  final PdfReaderStatus status;
+  final String? error;
 
   const PdfReaderState({
-    this.document             = null,
-    this.currentPage          = 1,
-    this.zoomLevel            = 1.0,
-    this.isToolbarVisible     = true,
+    this.document = null,
+    this.currentPage = 1,
+    this.zoomLevel = 1.0,
+    this.isToolbarVisible = true,
     this.isDocumentBookmarked = false,
-    this.bookmarkedPages      = const {},
-    this.status               = PdfReaderStatus.idle,
-    this.error                = null,
+    this.bookmarkedPages = const {},
+    this.status = PdfReaderStatus.idle,
+    this.error = null,
   });
 
   // ── Computed ──────────────────────────────────
-  int    get totalPages       => document?.totalPages ?? 0;
-  bool   get hasDocument      => document != null && status == PdfReaderStatus.loaded;
-  bool   get isLoading        => status == PdfReaderStatus.loading;
-  bool   get canGoNext        => currentPage < totalPages;
-  bool   get canGoPrevious    => currentPage > 1;
-  bool   get isFirst          => currentPage == 1;
-  bool   get isLast           => currentPage == totalPages;
-  bool   get isZoomed         => zoomLevel > 1.05;
-  double get progressFraction => totalPages > 0 ? currentPage / totalPages : 0.0;
-  double get progressPercent  => progressFraction * 100.0;
+  int get totalPages => document?.totalPages ?? 0;
+  bool get hasDocument => document != null && status == PdfReaderStatus.loaded;
+  bool get isLoading => status == PdfReaderStatus.loading;
+  bool get canGoNext => currentPage < totalPages;
+  bool get canGoPrevious => currentPage > 1;
+  bool get isFirst => currentPage == 1;
+  bool get isLast => currentPage == totalPages;
+  bool get isZoomed => zoomLevel > 1.05;
+  double get progressFraction =>
+      totalPages > 0 ? currentPage / totalPages : 0.0;
+  double get progressPercent => progressFraction * 100.0;
 
   bool isPageBookmarked(int page) => bookmarkedPages.contains(page);
   bool get isCurrentPageBookmarked => isPageBookmarked(currentPage);
 
   PdfReaderState copyWith({
     PdfDocumentModel? document,
-    int?              currentPage,
-    double?           zoomLevel,
-    bool?             isToolbarVisible,
-    bool?             isDocumentBookmarked,
-    Set<int>?         bookmarkedPages,
-    PdfReaderStatus?  status,
-    Object?           error = _sentinel,
+    int? currentPage,
+    double? zoomLevel,
+    bool? isToolbarVisible,
+    bool? isDocumentBookmarked,
+    Set<int>? bookmarkedPages,
+    PdfReaderStatus? status,
+    Object? error = _sentinel,
   }) =>
       PdfReaderState(
-        document:             document             ?? this.document,
-        currentPage:          currentPage          ?? this.currentPage,
-        zoomLevel:            zoomLevel            ?? this.zoomLevel,
-        isToolbarVisible:     isToolbarVisible     ?? this.isToolbarVisible,
+        document: document ?? this.document,
+        currentPage: currentPage ?? this.currentPage,
+        zoomLevel: zoomLevel ?? this.zoomLevel,
+        isToolbarVisible: isToolbarVisible ?? this.isToolbarVisible,
         isDocumentBookmarked: isDocumentBookmarked ?? this.isDocumentBookmarked,
-        bookmarkedPages:      bookmarkedPages      ?? this.bookmarkedPages,
-        status:               status               ?? this.status,
-        error:                error == _sentinel   ? this.error : error as String?,
+        bookmarkedPages: bookmarkedPages ?? this.bookmarkedPages,
+        status: status ?? this.status,
+        error: error == _sentinel ? this.error : error as String?,
       );
 }
 
@@ -117,22 +119,22 @@ class PdfReaderController extends ChangeNotifier {
     try {
       // Restore progress
       final progress = await _progressService.getProgress(document.id);
-      final lastPage = progress?.lastPage
-          ?? document.lastReadPage.clamp(1, document.totalPages);
+      final lastPage = progress?.lastPage ??
+          document.lastReadPage.clamp(1, document.totalPages);
 
       _pageController?.dispose();
       _pageController = PageController(initialPage: lastPage - 1);
       _pageController!.addListener(_onPageControllerUpdate);
 
       _setState(_state.copyWith(
-        document:             document,
-        currentPage:          lastPage,
-        bookmarkedPages:      {
+        document: document,
+        currentPage: lastPage,
+        bookmarkedPages: {
           ...document.bookmarkedPages,
           ...(progress?.bookmarkedPages ?? []),
         },
         status: PdfReaderStatus.loaded,
-        error:  null,
+        error: null,
       ));
 
       _scheduleToolbarHide();
@@ -145,7 +147,7 @@ class PdfReaderController extends ChangeNotifier {
       debugPrint('[PdfReaderController] loadPdf error: $e');
       _setState(_state.copyWith(
         status: PdfReaderStatus.error,
-        error:  'Failed to open PDF.',
+        error: 'Failed to open PDF.',
       ));
     }
   }
@@ -161,7 +163,7 @@ class PdfReaderController extends ChangeNotifier {
     await _pageController?.animateToPage(
       clamped - 1,
       duration: const Duration(milliseconds: 380),
-      curve:    Curves.easeOutCubic,
+      curve: Curves.easeOutCubic,
     );
     _setState(_state.copyWith(currentPage: clamped));
     await saveProgress();
@@ -173,7 +175,7 @@ class PdfReaderController extends ChangeNotifier {
     if (!_state.canGoNext) return false;
     _pageController?.nextPage(
       duration: const Duration(milliseconds: 280),
-      curve:    Curves.easeOutCubic,
+      curve: Curves.easeOutCubic,
     );
     _setState(_state.copyWith(currentPage: _state.currentPage + 1));
     _scheduleAutoSave();
@@ -186,7 +188,7 @@ class PdfReaderController extends ChangeNotifier {
     if (!_state.canGoPrevious) return false;
     _pageController?.previousPage(
       duration: const Duration(milliseconds: 280),
-      curve:    Curves.easeOutCubic,
+      curve: Curves.easeOutCubic,
     );
     _setState(_state.copyWith(currentPage: _state.currentPage - 1));
     _scheduleAutoSave();
@@ -217,11 +219,12 @@ class PdfReaderController extends ChangeNotifier {
     if (!_state.hasDocument) return;
     try {
       await _progressService.saveProgress(
-        pdfId:      _state.document!.id,
-        lastPage:   _state.currentPage,
+        pdfId: _state.document!.id,
+        lastPage: _state.currentPage,
         totalPages: _state.totalPages,
       );
-      debugPrint('[PdfReaderController] Progress saved: page ${_state.currentPage}');
+      debugPrint(
+          '[PdfReaderController] Progress saved: page ${_state.currentPage}');
     } catch (e) {
       debugPrint('[PdfReaderController] saveProgress error: $e');
     }
@@ -246,10 +249,14 @@ class PdfReaderController extends ChangeNotifier {
     final page = _state.currentPage;
     final added = await _progressService.togglePageBookmark(
       pdfId: _state.document!.id,
-      page:  page,
+      page: page,
     );
     final updated = Set<int>.from(_state.bookmarkedPages);
-    if (added) { updated.add(page); } else { updated.remove(page); }
+    if (added) {
+      updated.add(page);
+    } else {
+      updated.remove(page);
+    }
     _setState(_state.copyWith(bookmarkedPages: updated));
     return added;
   }
@@ -304,9 +311,9 @@ class PdfReaderController extends ChangeNotifier {
   // MARK: — GETTERS
   // ─────────────────────────────────────────────
 
-  int    getCurrentPage()  => _state.currentPage;
-  int    getTotalPages()   => _state.totalPages;
-  double getZoomLevel()    => _state.zoomLevel;
+  int getCurrentPage() => _state.currentPage;
+  int getTotalPages() => _state.totalPages;
+  double getZoomLevel() => _state.zoomLevel;
 
   // ─────────────────────────────────────────────
   // MARK: — AUTO SAVE
@@ -339,7 +346,7 @@ class PdfReaderController extends ChangeNotifier {
 
   @override
   void dispose() {
-    _disposed    = true;
+    _disposed = true;
     _toolbarTimer?.cancel();
     _autoSaveTimer?.cancel();
     _pageController?.removeListener(_onPageControllerUpdate);

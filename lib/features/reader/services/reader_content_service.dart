@@ -1,9 +1,11 @@
 // lib/features/reader/services/reader_content_service.dart
 import 'package:flutter/foundation.dart';
 import '../../../data/models/legal_models.dart';
-import '../../acts/data/acts_repository_impl.dart';
+import '../../acts/repositories/acts_repository_impl.dart';
 import '../../constitution/data/constitution_repository_impl.dart';
+import '../data/case_law_repository.dart';
 import '../data/case_law_repository_impl.dart';
+import '../models/case_law.dart' as reader_models;
 
 // ─────────────────────────────────────────────
 // MARK: — READER SOURCE TYPE
@@ -14,7 +16,7 @@ enum ReaderSourceType {
   constitutionArticle;
 
   String get label => switch (this) {
-        ReaderSourceType.actSection         => 'Section',
+        ReaderSourceType.actSection => 'Section',
         ReaderSourceType.constitutionArticle => 'Article',
       };
 }
@@ -24,18 +26,18 @@ enum ReaderSourceType {
 // ─────────────────────────────────────────────
 
 class ReaderContentData {
-  final String                 id;
-  final String                 number;
-  final String                 title;
+  final String id;
+  final String number;
+  final String title;
   final List<SectionTextBlock> content;
-  final ReaderSourceType       sourceType;
-  final List<String>           caseLawIds;
-  final String?                previousItemId;
-  final String?                nextItemId;
-  final String?                sourceId;    // actId or partId
-  final String?                sourceName;  // "BNS 2023" or "Constitution of India"
-  final bool                   isRepealed;
-  final bool                   isOmitted;
+  final ReaderSourceType sourceType;
+  final List<String> caseLawIds;
+  final String? previousItemId;
+  final String? nextItemId;
+  final String? sourceId; // actId or partId
+  final String? sourceName; // "BNS 2023" or "Constitution of India"
+  final bool isRepealed;
+  final bool isOmitted;
 
   const ReaderContentData({
     required this.id,
@@ -49,13 +51,13 @@ class ReaderContentData {
     this.sourceId,
     this.sourceName,
     this.isRepealed = false,
-    this.isOmitted  = false,
+    this.isOmitted = false,
   });
 
-  bool get hasCaseLaws  => caseLawIds.isNotEmpty;
-  bool get hasNext      => nextItemId != null;
-  bool get hasPrevious  => previousItemId != null;
-  bool get isActive     => !isRepealed && !isOmitted;
+  bool get hasCaseLaws => caseLawIds.isNotEmpty;
+  bool get hasNext => nextItemId != null;
+  bool get hasPrevious => previousItemId != null;
+  bool get isActive => !isRepealed && !isOmitted;
 
   String get displayLabel {
     if (sourceType == ReaderSourceType.constitutionArticle &&
@@ -66,23 +68,23 @@ class ReaderContentData {
   }
 
   ReaderContentData copyWith({
-    String?                 previousItemId,
-    String?                 nextItemId,
+    String? previousItemId,
+    String? nextItemId,
     List<SectionTextBlock>? content,
   }) =>
       ReaderContentData(
-        id:             id,
-        number:         number,
-        title:          title,
-        content:        content     ?? this.content,
-        sourceType:     sourceType,
-        caseLawIds:     caseLawIds,
+        id: id,
+        number: number,
+        title: title,
+        content: content ?? this.content,
+        sourceType: sourceType,
+        caseLawIds: caseLawIds,
         previousItemId: previousItemId ?? this.previousItemId,
-        nextItemId:     nextItemId     ?? this.nextItemId,
-        sourceId:       sourceId,
-        sourceName:     sourceName,
-        isRepealed:     isRepealed,
-        isOmitted:      isOmitted,
+        nextItemId: nextItemId ?? this.nextItemId,
+        sourceId: sourceId,
+        sourceName: sourceName,
+        isRepealed: isRepealed,
+        isOmitted: isOmitted,
       );
 }
 
@@ -91,19 +93,20 @@ class ReaderContentData {
 // ─────────────────────────────────────────────
 
 class ReaderContentService {
-  final ActsRepository          _actsRepo;
-  final ConstitutionRepository  _constitutionRepo;
-  final CaseLawRepository       _caseLawRepo;
+  final ActsRepository _actsRepo;
+  final ConstitutionRepository _constitutionRepo;
+  final CaseLawRepository _caseLawRepo;
 
   static const String _tag = 'ReaderContentService';
 
   ReaderContentService({
-    ActsRepository?         actsRepository,
+    ActsRepository? actsRepository,
     ConstitutionRepository? constitutionRepository,
-    CaseLawRepository?      caseLawRepository,
-  })  : _actsRepo         = actsRepository         ?? ActsRepositoryImpl(),
-        _constitutionRepo = constitutionRepository  ?? ConstitutionRepositoryImpl(),
-        _caseLawRepo      = caseLawRepository       ?? CaseLawRepositoryImpl();
+    CaseLawRepository? caseLawRepository,
+  })  : _actsRepo = actsRepository ?? ActsRepositoryImpl(),
+        _constitutionRepo =
+            constitutionRepository ?? ConstitutionRepositoryImpl(),
+        _caseLawRepo = caseLawRepository ?? CaseLawRepositoryImpl();
 
   // ─────────────────────────────────────────────
   // MARK: — ACT SECTION CONTENT
@@ -112,7 +115,7 @@ class ReaderContentService {
   Future<ReaderContentData?> getActSectionContent({
     required String actId,
     required String sectionId,
-    String?         chapterId,
+    String? chapterId,
   }) async {
     try {
       final act = await _actsRepo.getActById(actId);
@@ -123,15 +126,15 @@ class ReaderContentService {
 
       Section? targetSection;
       Chapter? targetChapter;
-      int      sectionIndexInChapter = -1;
+      int sectionIndexInChapter = -1;
 
       for (final chapter in act.chapters) {
         if (chapterId != null && chapter.id != chapterId) continue;
         for (var i = 0; i < chapter.sections.length; i++) {
           if (chapter.sections[i].id == sectionId) {
-            targetSection          = chapter.sections[i];
-            targetChapter          = chapter;
-            sectionIndexInChapter  = i;
+            targetSection = chapter.sections[i];
+            targetChapter = chapter;
+            sectionIndexInChapter = i;
             break;
           }
         }
@@ -143,25 +146,27 @@ class ReaderContentService {
         return null;
       }
 
-      final sections   = targetChapter.sections;
-      final prevId     = sectionIndexInChapter > 0
-          ? sections[sectionIndexInChapter - 1].id : null;
-      final nextId     = sectionIndexInChapter < sections.length - 1
-          ? sections[sectionIndexInChapter + 1].id : null;
+      final sections = targetChapter.sections;
+      final prevId = sectionIndexInChapter > 0
+          ? sections[sectionIndexInChapter - 1].id
+          : null;
+      final nextId = sectionIndexInChapter < sections.length - 1
+          ? sections[sectionIndexInChapter + 1].id
+          : null;
 
       return ReaderContentData(
-        id:             targetSection.id,
-        number:         targetSection.sectionNumber,
-        title:          targetSection.title,
-        content:        targetSection.content,
-        sourceType:     ReaderSourceType.actSection,
-        caseLawIds:     targetSection.caseLawIds,
+        id: targetSection.id,
+        number: targetSection.sectionNumber,
+        title: targetSection.title,
+        content: targetSection.content,
+        sourceType: ReaderSourceType.actSection,
+        caseLawIds: targetSection.caseLawIds,
         previousItemId: prevId,
-        nextItemId:     nextId,
-        sourceId:       actId,
-        sourceName:     act.displayTitle,
-        isRepealed:     targetSection.isRepealed,
-        isOmitted:      targetSection.isOmitted,
+        nextItemId: nextId,
+        sourceId: actId,
+        sourceName: act.displayTitle,
+        isRepealed: targetSection.isRepealed,
+        isOmitted: targetSection.isOmitted,
       );
     } catch (e) {
       debugPrint('[$_tag] getActSectionContent error: $e');
@@ -175,12 +180,12 @@ class ReaderContentService {
 
   Future<ReaderContentData?> getConstitutionArticleContent({
     required String articleId,
-    String?         partId,
+    String? partId,
   }) async {
     try {
-      Article?          targetArticle;
+      Article? targetArticle;
       ConstitutionPart? targetPart;
-      int               articleIndex = -1;
+      int articleIndex = -1;
 
       if (partId != null) {
         final part = await _constitutionRepo.getPartById(partId);
@@ -188,8 +193,8 @@ class ReaderContentService {
           for (var i = 0; i < part.articles.length; i++) {
             if (part.articles[i].id == articleId) {
               targetArticle = part.articles[i];
-              targetPart    = part;
-              articleIndex  = i;
+              targetPart = part;
+              articleIndex = i;
               break;
             }
           }
@@ -204,8 +209,8 @@ class ReaderContentService {
           for (var i = 0; i < part.articles.length; i++) {
             if (part.articles[i].id == articleId) {
               targetArticle = part.articles[i];
-              targetPart    = part;
-              articleIndex  = i;
+              targetPart = part;
+              articleIndex = i;
               break outer;
             }
           }
@@ -218,24 +223,24 @@ class ReaderContentService {
       }
 
       final articles = targetPart.articles;
-      final prevId   = articleIndex > 0
-          ? articles[articleIndex - 1].id : null;
-      final nextId   = articleIndex < articles.length - 1
-          ? articles[articleIndex + 1].id : null;
+      final prevId = articleIndex > 0 ? articles[articleIndex - 1].id : null;
+      final nextId = articleIndex < articles.length - 1
+          ? articles[articleIndex + 1].id
+          : null;
 
       return ReaderContentData(
-        id:             targetArticle.id,
-        number:         targetArticle.articleNumber,
-        title:          targetArticle.title,
-        content:        targetArticle.content,
-        sourceType:     ReaderSourceType.constitutionArticle,
-        caseLawIds:     targetArticle.caseLawIds,
+        id: targetArticle.id,
+        number: targetArticle.articleNumber,
+        title: targetArticle.title,
+        content: targetArticle.content,
+        sourceType: ReaderSourceType.constitutionArticle,
+        caseLawIds: targetArticle.caseLawIds,
         previousItemId: prevId,
-        nextItemId:     nextId,
-        sourceId:       targetPart.id,
-        sourceName:     'Constitution of India',
-        isRepealed:     targetArticle.isRepealed,
-        isOmitted:      targetArticle.isOmitted,
+        nextItemId: nextId,
+        sourceId: targetPart.id,
+        sourceName: 'Constitution of India',
+        isRepealed: targetArticle.isRepealed,
+        isOmitted: targetArticle.isOmitted,
       );
     } catch (e) {
       debugPrint('[$_tag] getConstitutionArticleContent error: $e');
@@ -247,11 +252,11 @@ class ReaderContentService {
   // MARK: — LINKED CASE LAWS
   // ─────────────────────────────────────────────
 
-  Future<List<CaseLawModel>> getLinkedCaseLaws(
-      List<String> caseLawIds) async {
+  Future<List<CaseLaw>> getLinkedCaseLaws(List<String> caseLawIds) async {
     if (caseLawIds.isEmpty) return const [];
     try {
-      return await _caseLawRepo.getCaseLawsByIds(caseLawIds);
+      final caseLaws = await _caseLawRepo.getCaseLawsByIds(caseLawIds);
+      return caseLaws.map(_toLegalCaseLaw).toList();
     } catch (e) {
       debugPrint('[$_tag] getLinkedCaseLaws error: $e');
       return const [];
@@ -268,21 +273,20 @@ class ReaderContentService {
     if (prevId == null) return null;
 
     return switch (current.sourceType) {
-      ReaderSourceType.actSection => getActSectionContent(
-          actId: current.sourceId!, sectionId: prevId),
+      ReaderSourceType.actSection =>
+        getActSectionContent(actId: current.sourceId!, sectionId: prevId),
       ReaderSourceType.constitutionArticle => getConstitutionArticleContent(
           articleId: prevId, partId: current.sourceId),
     };
   }
 
-  Future<ReaderContentData?> getNextContent(
-      ReaderContentData current) async {
+  Future<ReaderContentData?> getNextContent(ReaderContentData current) async {
     final nextId = current.nextItemId;
     if (nextId == null) return null;
 
     return switch (current.sourceType) {
-      ReaderSourceType.actSection => getActSectionContent(
-          actId: current.sourceId!, sectionId: nextId),
+      ReaderSourceType.actSection =>
+        getActSectionContent(actId: current.sourceId!, sectionId: nextId),
       ReaderSourceType.constitutionArticle => getConstitutionArticleContent(
           articleId: nextId, partId: current.sourceId),
     };
@@ -293,7 +297,29 @@ class ReaderContentService {
   // ─────────────────────────────────────────────
 
   Future<void> warmupCaseLawCache() async {
-    try { await _caseLawRepo.getAllCaseLaws(); }
-    catch (e) { debugPrint('[$_tag] warmupCaseLawCache error: $e'); }
+    try {
+      await _caseLawRepo.getAllCaseLaws();
+    } catch (e) {
+      debugPrint('[$_tag] warmupCaseLawCache error: $e');
+    }
   }
+
+  CaseLaw _toLegalCaseLaw(reader_models.CaseLaw caseLaw) => CaseLaw(
+        id: caseLaw.id,
+        title: caseLaw.title,
+        citation: caseLaw.citation,
+        court: caseLaw.court,
+        year: caseLaw.year,
+        facts: caseLaw.facts,
+        issues: caseLaw.issues,
+        judgment: caseLaw.judgment,
+        reasoning: caseLaw.reasoning,
+        significance: caseLaw.significance,
+        relatedSectionIds: caseLaw.relatedSection == null
+            ? const []
+            : [caseLaw.relatedSection!],
+        relatedArticleIds: caseLaw.relatedArticle == null
+            ? const []
+            : [caseLaw.relatedArticle!],
+      );
 }

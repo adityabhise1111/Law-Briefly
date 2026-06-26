@@ -23,12 +23,10 @@ final readerItemsProvider =
     StateProvider<List<ReaderContent>>((ref) => const []);
 
 /// Initial content ID to open when the reader loads.
-final readerInitialContentIdProvider =
-    StateProvider<String?>((ref) => null);
+final readerInitialContentIdProvider = StateProvider<String?>((ref) => null);
 
 /// Source identifier (e.g., actId or partId) for the current session.
-final readerSourceIdProvider =
-    StateProvider<String?>((ref) => null);
+final readerSourceIdProvider = StateProvider<String?>((ref) => null);
 
 // ─────────────────────────────────────────────
 // MARK: — READER NAVIGATION
@@ -39,11 +37,11 @@ final readerSourceIdProvider =
 /// Responds to readerItemsProvider changes.
 final readerNavigationProvider =
     ChangeNotifierProvider.autoDispose<ReaderNavigationController>((ref) {
-  final items     = ref.watch(readerItemsProvider);
+  final items = ref.watch(readerItemsProvider);
   final initialId = ref.read(readerInitialContentIdProvider);
 
   final controller = ReaderNavigationController(
-    items:     items,
+    items: items,
     initialId: initialId,
   );
 
@@ -72,17 +70,17 @@ final readerProgressFractionProvider = Provider.autoDispose<double>((ref) {
 /// Bookmark controller for the reader screen.
 final readerBookmarkControllerProvider =
     ChangeNotifierProvider.autoDispose<ReaderBookmarkController>((ref) {
-  final bookmarkService = ref.watch(bookmarkServiceProvider);
-  final controller = ReaderBookmarkController(service: bookmarkService);
+  ref.watch(bookmarkServiceProvider);
+  final controller = ReaderBookmarkController();
   ref.onDispose(controller.dispose);
   return controller;
 });
 
 /// Convenience: whether the current content is bookmarked.
-final currentContentBookmarkedProvider =
-    Provider.autoDispose<bool>((ref) {
+final currentContentBookmarkedProvider = Provider.autoDispose<bool>((ref) {
   final ctrl = ref.watch(readerBookmarkControllerProvider);
-  return ctrl.isBookmarked;
+  final content = ref.watch(currentReaderContentProvider);
+  return content != null && ctrl.isBookmarked(content.id);
 });
 
 // ─────────────────────────────────────────────
@@ -91,10 +89,9 @@ final currentContentBookmarkedProvider =
 
 /// Resolver that maps caseLawIds → CaseLaw objects.
 /// Auto-disposed; each reader session gets a fresh cache.
-final caseLawResolverProvider =
-    Provider.autoDispose<CaseLawResolver>((ref) {
+final caseLawResolverProvider = Provider.autoDispose<CaseLawResolver>((ref) {
   final repository = ref.watch(legalRepositoryProvider);
-  final resolver   = CaseLawResolver(repository);
+  final resolver = CaseLawResolver(repository);
   ref.onDispose(resolver.clearCache);
   return resolver;
 });
@@ -113,7 +110,7 @@ final resolvedCaseLawsProvider =
 /// Resolves case laws for the CURRENT content in the reader.
 final currentContentCaseLawsProvider =
     FutureProvider.autoDispose<List<CaseLaw>>((ref) async {
-  final content  = ref.watch(currentReaderContentProvider);
+  final content = ref.watch(currentReaderContentProvider);
   if (content == null || content.caseLawIds.isEmpty) return const [];
   final resolver = ref.watch(caseLawResolverProvider);
   return resolver.resolveCaseLaws(content.caseLawIds);
@@ -124,11 +121,10 @@ final currentContentCaseLawsProvider =
 // ─────────────────────────────────────────────
 
 /// Saved progress snapshot for the currently loaded content.
-final currentContentProgressProvider =
-    FutureProvider.autoDispose((ref) async {
-  final content  = ref.watch(currentReaderContentProvider);
+final currentContentProgressProvider = FutureProvider.autoDispose((ref) async {
+  final content = ref.watch(currentReaderContentProvider);
   if (content == null) return null;
-  final service  = ref.watch(readerProgressServiceProvider);
+  final service = ref.watch(readerProgressServiceProvider);
   return service.getProgress(content.id);
 });
 
@@ -147,8 +143,10 @@ final readerFilteredItemsProvider =
   final query = ref.watch(readerSearchQueryProvider).trim().toLowerCase();
 
   if (query.isEmpty) return items;
-  return items.where((c) =>
-      c.title.toLowerCase().contains(query) ||
-      c.number.toLowerCase().contains(query) ||
-      c.content.any((b) => b.text.toLowerCase().contains(query))).toList();
+  return items
+      .where((c) =>
+          c.title.toLowerCase().contains(query) ||
+          c.number.toLowerCase().contains(query) ||
+          c.content.any((b) => b.text.toLowerCase().contains(query)))
+      .toList();
 });

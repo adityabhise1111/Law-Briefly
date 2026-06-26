@@ -4,6 +4,7 @@
 
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import '../../core/theme/app_theme.dart';
@@ -20,11 +21,11 @@ enum NoteEditorMode { create, edit }
 // ─────────────────────────────────────────────
 
 class NoteEditorScreen extends StatefulWidget {
-  final PersonalNote?            note;         // null = create mode
+  final PersonalNote? note; // null = create mode
   final ValueChanged<PersonalNote>? onSave;
-  final VoidCallback?            onCancel;
-  final String?                  linkedContentId;
-  final String?                  linkedContentTitle;
+  final VoidCallback? onCancel;
+  final String? linkedContentId;
+  final String? linkedContentTitle;
 
   const NoteEditorScreen({
     super.key,
@@ -44,38 +45,37 @@ class NoteEditorScreen extends StatefulWidget {
 
 class _NoteEditorScreenState extends State<NoteEditorScreen>
     with SingleTickerProviderStateMixin {
-
   // ── Controllers ───────────────────────────────
   late final TextEditingController _titleController;
   late final TextEditingController _contentController;
-  late final FocusNode             _titleFocus;
-  late final FocusNode             _contentFocus;
-  late final AnimationController   _entranceController;
+  late final FocusNode _titleFocus;
+  late final FocusNode _contentFocus;
+  late final AnimationController _entranceController;
 
   // ── State ─────────────────────────────────────
-  bool _isSaving  = false;
-  bool _titleFocused   = false;
+  bool _isSaving = false;
+  bool _titleFocused = false;
   bool _contentFocused = false;
 
   // ── Entrance animations ───────────────────────
-  late Animation<double>  _appBarFade;
-  late Animation<double>  _bodyFade;
-  late Animation<Offset>  _bodySlide;
+  late Animation<double> _appBarFade;
+  late Animation<double> _bodyFade;
+  late Animation<Offset> _bodySlide;
 
   // ─────────────────────────────────────────────
   // MARK: — COMPUTED
   // ─────────────────────────────────────────────
 
-  bool get _canSave  => _titleController.text.trim().isNotEmpty;
+  bool get _canSave => _titleController.text.trim().isNotEmpty;
   bool get _isCreate => widget.mode == NoteEditorMode.create;
 
   bool get _hasChanges {
     if (_isCreate) {
       return _titleController.text.isNotEmpty ||
-             _contentController.text.isNotEmpty;
+          _contentController.text.isNotEmpty;
     }
-    return _titleController.text   != widget.note!.title ||
-           _contentController.text != widget.note!.content;
+    return _titleController.text != widget.note!.title ||
+        _contentController.text != widget.note!.content;
   }
 
   int get _wordCount {
@@ -93,28 +93,34 @@ class _NoteEditorScreenState extends State<NoteEditorScreen>
   @override
   void initState() {
     super.initState();
-    _titleController   = TextEditingController(text: widget.note?.title   ?? '');
-    _contentController = TextEditingController(text: widget.note?.content ?? '');
-    _titleFocus        = FocusNode()
-      ..addListener(() => setState(() => _titleFocused   = _titleFocus.hasFocus));
-    _contentFocus      = FocusNode()
-      ..addListener(() => setState(() => _contentFocused = _contentFocus.hasFocus));
+    _titleController = TextEditingController(text: widget.note?.title ?? '');
+    _contentController =
+        TextEditingController(text: widget.note?.content ?? '');
+    _titleFocus = FocusNode()
+      ..addListener(() => setState(() => _titleFocused = _titleFocus.hasFocus));
+    _contentFocus = FocusNode()
+      ..addListener(
+          () => setState(() => _contentFocused = _contentFocus.hasFocus));
 
     _entranceController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 480),
     );
     _appBarFade = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _entranceController,
-        curve: const Interval(0.0, 0.45, curve: Curves.easeOut)),
+      CurvedAnimation(
+          parent: _entranceController,
+          curve: const Interval(0.0, 0.45, curve: Curves.easeOut)),
     );
     _bodyFade = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _entranceController,
-        curve: const Interval(0.15, 0.75, curve: Curves.easeOut)),
+      CurvedAnimation(
+          parent: _entranceController,
+          curve: const Interval(0.15, 0.75, curve: Curves.easeOut)),
     );
     _bodySlide = Tween<Offset>(
-      begin: const Offset(0, 0.05), end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _entranceController,
+      begin: const Offset(0, 0.05),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+        parent: _entranceController,
         curve: const Interval(0.15, 0.80, curve: Curves.easeOutCubic)));
 
     Future.delayed(const Duration(milliseconds: 60), () {
@@ -156,16 +162,16 @@ class _NoteEditorScreenState extends State<NoteEditorScreen>
 
     final now = DateTime.now();
     final saved = widget.note?.copyWith(
-          title:        _titleController.text.trim(),
-          content:      _contentController.text,
+          title: _titleController.text.trim(),
+          content: _contentController.text,
           lastModified: now,
         ) ??
         PersonalNote(
-          id:            'note_${now.millisecondsSinceEpoch}',
-          title:         _titleController.text.trim(),
-          content:       _contentController.text,
-          lastModified:  now,
-          createdAt:     now,
+          id: 'note_${now.millisecondsSinceEpoch}',
+          title: _titleController.text.trim(),
+          content: _contentController.text,
+          lastModified: now,
+          createdAt: now,
           linkedContentId: widget.linkedContentId,
         );
 
@@ -211,9 +217,8 @@ class _NoteEditorScreenState extends State<NoteEditorScreen>
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      backgroundColor: dark
-          ? AppColors.darkBackground
-          : const Color(0xFFFFFEFA),
+      backgroundColor:
+          dark ? AppColors.darkBackground : const Color(0xFFFFFEFA),
       resizeToAvoidBottomInset: true,
       appBar: _buildAppBar(dark),
       body: Stack(
@@ -245,9 +250,8 @@ class _NoteEditorScreenState extends State<NoteEditorScreen>
         child: Text(
           _isCreate ? 'New Note' : 'Edit Note',
           style: AppTypography.titleMedium.copyWith(
-            color: dark
-                ? AppColors.darkPrimaryText
-                : AppColors.lightPrimaryText,
+            color:
+                dark ? AppColors.darkPrimaryText : AppColors.lightPrimaryText,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -262,11 +266,11 @@ class _NoteEditorScreenState extends State<NoteEditorScreen>
           child: Padding(
             padding: const EdgeInsets.only(right: AppSpacing.base),
             child: _SaveButton(
-              isDark:    dark,
-              canSave:   _canSave,
+              isDark: dark,
+              canSave: _canSave,
               isLoading: _isSaving,
-              accent:    accent,
-              onTap:     _handleSave,
+              accent: accent,
+              onTap: _handleSave,
             ),
           ),
         ),
@@ -279,12 +283,10 @@ class _NoteEditorScreenState extends State<NoteEditorScreen>
   // ─────────────────────────────────────────────
 
   Widget _buildBody(bool dark) {
-    final textColor = dark
-        ? AppColors.darkPrimaryText
-        : AppColors.lightPrimaryText;
-    final secondaryColor = dark
-        ? AppColors.darkSecondaryText
-        : AppColors.lightSecondaryText;
+    final textColor =
+        dark ? AppColors.darkPrimaryText : AppColors.lightPrimaryText;
+    final secondaryColor =
+        dark ? AppColors.darkSecondaryText : AppColors.lightSecondaryText;
     final topPad = MediaQuery.of(context).padding.top + kToolbarHeight;
 
     return Column(
@@ -295,10 +297,13 @@ class _NoteEditorScreenState extends State<NoteEditorScreen>
         if (widget.linkedContentTitle != null)
           Padding(
             padding: const EdgeInsets.fromLTRB(
-              AppSpacing.xl, 0, AppSpacing.xl, AppSpacing.md,
+              AppSpacing.xl,
+              0,
+              AppSpacing.xl,
+              AppSpacing.md,
             ),
             child: _LinkedContentChip(
-              title:  widget.linkedContentTitle!,
+              title: widget.linkedContentTitle!,
               isDark: dark,
             ),
           ),
@@ -307,22 +312,22 @@ class _NoteEditorScreenState extends State<NoteEditorScreen>
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
           child: TextField(
-            controller:      _titleController,
-            focusNode:       _titleFocus,
+            controller: _titleController,
+            focusNode: _titleFocus,
             textInputAction: TextInputAction.next,
             textCapitalization: TextCapitalization.sentences,
-            onSubmitted:     (_) => _contentFocus.requestFocus(),
-            maxLines:        null,
+            onSubmitted: (_) => _contentFocus.requestFocus(),
+            maxLines: null,
             style: AppTypography.headlineLarge.copyWith(
-              color:       textColor,
-              fontWeight:  FontWeight.w700,
+              color: textColor,
+              fontWeight: FontWeight.w700,
               letterSpacing: -0.4,
-              height:      1.25,
+              height: 1.25,
             ),
             decoration: InputDecoration(
               hintText: 'Title',
               hintStyle: AppTypography.headlineLarge.copyWith(
-                color:      secondaryColor.withOpacity(0.45),
+                color: secondaryColor.withOpacity(0.45),
                 fontWeight: FontWeight.w700,
                 letterSpacing: -0.4,
               ),
@@ -336,14 +341,19 @@ class _NoteEditorScreenState extends State<NoteEditorScreen>
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
           child: Divider(
-            height: 0.5, thickness: 0.5,
+            height: 0.5,
+            thickness: 0.5,
             color: AnimatedContainer(
-              duration: AppAnimation.standard,
-              color: _titleFocused
-                  ? (dark ? AppColors.accentLight : AppColors.accent)
-                      .withOpacity(0.50)
-                  : (dark ? AppColors.darkSeparator : AppColors.lightSeparator),
-            ).decoration.toString() == '' ? AppColors.lightSeparator
+                      duration: AppAnimation.standard,
+                      color: _titleFocused
+                          ? (dark ? AppColors.accentLight : AppColors.accent)
+                              .withOpacity(0.50)
+                          : (dark
+                              ? AppColors.darkSeparator
+                              : AppColors.lightSeparator),
+                    ).decoration.toString() ==
+                    ''
+                ? AppColors.lightSeparator
                 : (dark ? AppColors.darkSeparator : AppColors.lightSeparator),
           ),
         ),
@@ -365,15 +375,15 @@ class _NoteEditorScreenState extends State<NoteEditorScreen>
               ),
               child: TextField(
                 controller: _contentController,
-                focusNode:  _contentFocus,
-                maxLines:   null,
+                focusNode: _contentFocus,
+                maxLines: null,
                 textCapitalization: TextCapitalization.sentences,
                 style: const TextStyle(
-                  fontFamily:    'Georgia',
-                  fontSize:      AppReader.baseFontSize,
-                  height:        AppReader.lineHeight,
+                  fontFamily: 'Georgia',
+                  fontSize: AppReader.baseFontSize,
+                  height: AppReader.lineHeight,
                   letterSpacing: 0.10,
-                  fontWeight:    FontWeight.w400,
+                  fontWeight: FontWeight.w400,
                 ).merge(TextStyle(
                   color: textColor,
                 )),
@@ -381,9 +391,9 @@ class _NoteEditorScreenState extends State<NoteEditorScreen>
                   hintText: 'Start writing your note…',
                   hintStyle: const TextStyle(
                     fontFamily: 'Georgia',
-                    fontSize:   AppReader.baseFontSize,
-                    height:     AppReader.lineHeight,
-                    fontStyle:  FontStyle.italic,
+                    fontSize: AppReader.baseFontSize,
+                    height: AppReader.lineHeight,
+                    fontStyle: FontStyle.italic,
                   ).merge(TextStyle(
                     color: secondaryColor.withOpacity(0.40),
                   )),
@@ -408,10 +418,13 @@ class _NoteEditorScreenState extends State<NoteEditorScreen>
 
     return AnimatedOpacity(
       duration: AppAnimation.standard,
-      opacity:  _contentFocused ? 1.0 : 0.55,
+      opacity: _contentFocused ? 1.0 : 0.55,
       child: Container(
         padding: EdgeInsets.fromLTRB(
-          AppSpacing.xl, AppSpacing.sm, AppSpacing.xl, botPad + AppSpacing.sm,
+          AppSpacing.xl,
+          AppSpacing.sm,
+          AppSpacing.xl,
+          botPad + AppSpacing.sm,
         ),
         child: Row(
           children: [
@@ -423,7 +436,8 @@ class _NoteEditorScreenState extends State<NoteEditorScreen>
             ),
             const SizedBox(width: AppSpacing.md),
             Container(
-              width: 3, height: 3,
+              width: 3,
+              height: 3,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: secondaryColor.withOpacity(0.4),
@@ -468,12 +482,13 @@ class _CancelButton extends StatefulWidget {
 class _CancelButtonState extends State<_CancelButton>
     with SingleTickerProviderStateMixin {
   late AnimationController _press;
-  late Animation<double>   _scale;
+  late Animation<double> _scale;
 
   @override
   void initState() {
     super.initState();
-    _press = AnimationController(vsync: this,
+    _press = AnimationController(
+        vsync: this,
         duration: const Duration(milliseconds: 120),
         reverseDuration: const Duration(milliseconds: 200));
     _scale = Tween<double>(begin: 1.0, end: 0.90)
@@ -481,14 +496,20 @@ class _CancelButtonState extends State<_CancelButton>
   }
 
   @override
-  void dispose() { _press.dispose(); super.dispose(); }
+  void dispose() {
+    _press.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) => ScaleTransition(
         scale: _scale,
         child: GestureDetector(
-          onTapDown:   (_) => _press.forward(),
-          onTapUp:     (_) { _press.reverse(); widget.onTap(); },
+          onTapDown: (_) => _press.forward(),
+          onTapUp: (_) {
+            _press.reverse();
+            widget.onTap();
+          },
           onTapCancel: () => _press.reverse(),
           child: Padding(
             padding: const EdgeInsets.only(left: AppSpacing.base),
@@ -496,7 +517,7 @@ class _CancelButtonState extends State<_CancelButton>
               'Cancel',
               style: AppTypography.bodyMedium.copyWith(
                 fontFamily: null,
-                color:      AppColors.error,
+                color: AppColors.error,
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -510,10 +531,10 @@ class _CancelButtonState extends State<_CancelButton>
 // ─────────────────────────────────────────────
 
 class _SaveButton extends StatefulWidget {
-  final bool       isDark;
-  final bool       canSave;
-  final bool       isLoading;
-  final Color      accent;
+  final bool isDark;
+  final bool canSave;
+  final bool isLoading;
+  final Color accent;
   final VoidCallback onTap;
 
   const _SaveButton({
@@ -531,12 +552,13 @@ class _SaveButton extends StatefulWidget {
 class _SaveButtonState extends State<_SaveButton>
     with SingleTickerProviderStateMixin {
   late AnimationController _press;
-  late Animation<double>   _scale;
+  late Animation<double> _scale;
 
   @override
   void initState() {
     super.initState();
-    _press = AnimationController(vsync: this,
+    _press = AnimationController(
+        vsync: this,
         duration: const Duration(milliseconds: 110),
         reverseDuration: const Duration(milliseconds: 200));
     _scale = Tween<double>(begin: 1.0, end: 0.90)
@@ -544,30 +566,40 @@ class _SaveButtonState extends State<_SaveButton>
   }
 
   @override
-  void dispose() { _press.dispose(); super.dispose(); }
+  void dispose() {
+    _press.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final color = widget.canSave ? widget.accent : widget.accent.withOpacity(0.35);
+    final color =
+        widget.canSave ? widget.accent : widget.accent.withOpacity(0.35);
 
     return IgnorePointer(
       ignoring: !widget.canSave || widget.isLoading,
       child: ScaleTransition(
         scale: _scale,
         child: GestureDetector(
-          onTapDown:   (_) => _press.forward(),
-          onTapUp:     (_) { _press.reverse(); widget.onTap(); HapticFeedback.lightImpact(); },
+          onTapDown: (_) => _press.forward(),
+          onTapUp: (_) {
+            _press.reverse();
+            widget.onTap();
+            HapticFeedback.lightImpact();
+          },
           onTapCancel: () => _press.reverse(),
           child: widget.isLoading
               ? SizedBox(
-                  width: 18, height: 18,
-                  child: CircularProgressIndicator(strokeWidth: 2, color: color),
+                  width: 18,
+                  height: 18,
+                  child:
+                      CircularProgressIndicator(strokeWidth: 2, color: color),
                 )
               : Text(
                   'Save',
                   style: AppTypography.bodyMedium.copyWith(
                     fontFamily: null,
-                    color:      color,
+                    color: color,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -593,9 +625,9 @@ class _LinkedContentChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color:        accent.withOpacity(isDark ? 0.12 : 0.08),
+        color: accent.withOpacity(isDark ? 0.12 : 0.08),
         borderRadius: AppRadius.chip,
-        border:       Border.all(color: accent.withOpacity(0.22), width: 0.5),
+        border: Border.all(color: accent.withOpacity(0.22), width: 0.5),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -606,9 +638,9 @@ class _LinkedContentChip extends StatelessWidget {
             child: Text(
               title,
               style: AppTypography.labelSmall.copyWith(
-                color:      accent,
+                color: accent,
                 fontWeight: FontWeight.w600,
-                fontSize:   11,
+                fontSize: 11,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -630,8 +662,8 @@ class _DiscardDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Dialog(
-        backgroundColor:  Colors.transparent,
-        elevation:        0,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         child: ClipRRect(
           borderRadius: AppRadius.dialog,
           child: BackdropFilter(
@@ -639,9 +671,8 @@ class _DiscardDialog extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(AppSpacing.xl),
               decoration: BoxDecoration(
-                color: isDark
-                    ? const Color(0xF01C1C1E)
-                    : const Color(0xF0FFFFFF),
+                color:
+                    isDark ? const Color(0xF01C1C1E) : const Color(0xF0FFFFFF),
                 borderRadius: AppRadius.dialog,
                 border: Border.all(
                   color: isDark
@@ -654,7 +685,8 @@ class _DiscardDialog extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('Discard Changes?',
+                  Text(
+                    'Discard Changes?',
                     style: AppTypography.titleMedium.copyWith(
                       color: isDark
                           ? AppColors.darkPrimaryText
@@ -678,20 +710,20 @@ class _DiscardDialog extends StatelessWidget {
                     children: [
                       Expanded(
                         child: _DialogButton(
-                          label:     'Keep Editing',
+                          label: 'Keep Editing',
                           isPrimary: false,
-                          isDark:    isDark,
-                          onTap:     () => Navigator.of(context).pop(false),
+                          isDark: isDark,
+                          onTap: () => Navigator.of(context).pop(false),
                         ),
                       ),
                       const SizedBox(width: AppSpacing.sm),
                       Expanded(
                         child: _DialogButton(
-                          label:     'Discard',
+                          label: 'Discard',
                           isPrimary: true,
-                          isDark:    isDark,
-                          isError:   true,
-                          onTap:     () => Navigator.of(context).pop(true),
+                          isDark: isDark,
+                          isError: true,
+                          onTap: () => Navigator.of(context).pop(true),
                         ),
                       ),
                     ],
@@ -731,8 +763,12 @@ class _DialogButtonState extends State<_DialogButton> {
     final color = widget.isError ? AppColors.error : AppColors.accent;
 
     return GestureDetector(
-      onTapDown:   (_) => setState(() => _pressed = true),
-      onTapUp:     (_) { setState(() => _pressed = false); HapticFeedback.lightImpact(); widget.onTap(); },
+      onTapDown: (_) => setState(() => _pressed = true),
+      onTapUp: (_) {
+        setState(() => _pressed = false);
+        HapticFeedback.lightImpact();
+        widget.onTap();
+      },
       onTapCancel: () => setState(() => _pressed = false),
       child: AnimatedOpacity(
         duration: const Duration(milliseconds: 80),
@@ -749,9 +785,7 @@ class _DialogButtonState extends State<_DialogButton> {
             child: Text(
               widget.label,
               style: AppTypography.labelMedium.copyWith(
-                color: widget.isPrimary
-                    ? Colors.white
-                    : color,
+                color: widget.isPrimary ? Colors.white : color,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -775,7 +809,7 @@ class _EditorBackground extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
-            end:   Alignment.bottomCenter,
+            end: Alignment.bottomCenter,
             colors: isDark
                 ? [const Color(0xFF0D1117), const Color(0xFF121212)]
                 : [const Color(0xFFFFFEFA), const Color(0xFFFFFFFF)],
@@ -790,10 +824,10 @@ class _EditorBackground extends StatelessWidget {
 
 String _relativeDate(DateTime date) {
   final diff = DateTime.now().difference(date);
-  if (diff.inMinutes < 1)  return 'just now';
+  if (diff.inMinutes < 1) return 'just now';
   if (diff.inMinutes < 60) return '${diff.inMinutes}m ago';
-  if (diff.inHours   < 24) return '${diff.inHours}h ago';
-  if (diff.inDays    == 1) return 'yesterday';
-  if (diff.inDays    <  7) return '${diff.inDays} days ago';
+  if (diff.inHours < 24) return '${diff.inHours}h ago';
+  if (diff.inDays == 1) return 'yesterday';
+  if (diff.inDays < 7) return '${diff.inDays} days ago';
   return '${date.day}/${date.month}/${date.year}';
 }

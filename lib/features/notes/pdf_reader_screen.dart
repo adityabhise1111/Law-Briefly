@@ -13,43 +13,45 @@ import '../../core/theme/app_theme.dart';
 // MARK: — ENUMS
 // ─────────────────────────────────────────────
 
-enum ScrollMode  { singlePage, continuous }
-enum NightMode   { light, dark, sepia }
-enum ZoomPreset  { fit, width, custom }
+enum ScrollMode { singlePage, continuous }
+
+enum NightMode { light, dark, sepia }
+
+enum ZoomPreset { fit, width, custom }
 
 // ─────────────────────────────────────────────
 // MARK: — PDF DOCUMENT MODEL (ISAR-ready)
 // ─────────────────────────────────────────────
 
 class PdfDocumentModel {
-  final String      id;
-  final String      title;
-  final String      pdfPath;        // asset or file path
-  final int         totalPages;
-  final int         lastReadPage;   // resume reading
-  final List<int>   bookmarkedPages;
-  final String?     subject;
-  final String?     yearLabel;      // "BALLB 1st Year"
-  final String?     description;
-  final DateTime?   uploadedAt;
-  final int?        fileSizeBytes;
-  final bool        isDownloaded;   // Future: offline
-  final bool        isPremium;      // Future: marketplace
+  final String id;
+  final String title;
+  final String pdfPath; // asset or file path
+  final int totalPages;
+  final int lastReadPage; // resume reading
+  final List<int> bookmarkedPages;
+  final String? subject;
+  final String? yearLabel; // "BALLB 1st Year"
+  final String? description;
+  final DateTime? uploadedAt;
+  final int? fileSizeBytes;
+  final bool isDownloaded; // Future: offline
+  final bool isPremium; // Future: marketplace
 
   const PdfDocumentModel({
     required this.id,
     required this.title,
     required this.pdfPath,
     required this.totalPages,
-    this.lastReadPage    = 1,
+    this.lastReadPage = 1,
     this.bookmarkedPages = const [],
     this.subject,
     this.yearLabel,
     this.description,
     this.uploadedAt,
     this.fileSizeBytes,
-    this.isDownloaded    = true,
-    this.isPremium       = false,
+    this.isDownloaded = true,
+    this.isPremium = false,
   });
 
   double get readingProgress =>
@@ -59,33 +61,33 @@ class PdfDocumentModel {
 
   factory PdfDocumentModel.fromJson(Map<String, dynamic> json) =>
       PdfDocumentModel(
-        id:           json['id']             as String,
-        title:        json['title']          as String,
-        pdfPath:      json['pdf_path']       as String,
-        totalPages:   json['total_pages']    as int,
+        id: json['id'] as String,
+        title: json['title'] as String,
+        pdfPath: json['pdf_path'] as String,
+        totalPages: json['total_pages'] as int,
         lastReadPage: json['last_read_page'] as int? ?? 1,
         bookmarkedPages: List<int>.from(
           json['bookmarked_pages'] as List? ?? [],
         ),
-        subject:       json['subject']    as String?,
-        yearLabel:     json['year_label'] as String?,
-        description:   json['description'] as String?,
-        isDownloaded:  json['is_downloaded'] as bool? ?? true,
-        isPremium:     json['is_premium']    as bool? ?? false,
+        subject: json['subject'] as String?,
+        yearLabel: json['year_label'] as String?,
+        description: json['description'] as String?,
+        isDownloaded: json['is_downloaded'] as bool? ?? true,
+        isPremium: json['is_premium'] as bool? ?? false,
       );
 
   Map<String, dynamic> toJson() => {
-        'id':              id,
-        'title':           title,
-        'pdf_path':        pdfPath,
-        'total_pages':     totalPages,
-        'last_read_page':  lastReadPage,
+        'id': id,
+        'title': title,
+        'pdf_path': pdfPath,
+        'total_pages': totalPages,
+        'last_read_page': lastReadPage,
         'bookmarked_pages': bookmarkedPages,
-        'subject':         subject,
-        'year_label':      yearLabel,
-        'description':     description,
-        'is_downloaded':   isDownloaded,
-        'is_premium':      isPremium,
+        'subject': subject,
+        'year_label': yearLabel,
+        'description': description,
+        'is_downloaded': isDownloaded,
+        'is_premium': isPremium,
       };
 }
 
@@ -94,49 +96,49 @@ class PdfDocumentModel {
 // ─────────────────────────────────────────────
 
 class ReaderState {
-  final int        currentPage;
-  final double     zoomLevel;         // 1.0 = 100%
-  final bool       isDocumentBookmarked;
-  final bool       isToolbarVisible;
-  final bool       isAppBarVisible;
-  final bool       isLoading;
-  final bool       isFullScreen;
+  final int currentPage;
+  final double zoomLevel; // 1.0 = 100%
+  final bool isDocumentBookmarked;
+  final bool isToolbarVisible;
+  final bool isAppBarVisible;
+  final bool isLoading;
+  final bool isFullScreen;
   final ScrollMode scrollMode;
-  final NightMode  nightMode;
+  final NightMode nightMode;
 
   const ReaderState({
-    this.currentPage           = 1,
-    this.zoomLevel             = 1.0,
-    this.isDocumentBookmarked  = false,
-    this.isToolbarVisible      = true,
-    this.isAppBarVisible       = true,
-    this.isLoading             = false,
-    this.isFullScreen          = false,
-    this.scrollMode            = ScrollMode.singlePage,
-    this.nightMode             = NightMode.light,
+    this.currentPage = 1,
+    this.zoomLevel = 1.0,
+    this.isDocumentBookmarked = false,
+    this.isToolbarVisible = true,
+    this.isAppBarVisible = true,
+    this.isLoading = false,
+    this.isFullScreen = false,
+    this.scrollMode = ScrollMode.singlePage,
+    this.nightMode = NightMode.light,
   });
 
   ReaderState copyWith({
-    int?        currentPage,
-    double?     zoomLevel,
-    bool?       isDocumentBookmarked,
-    bool?       isToolbarVisible,
-    bool?       isAppBarVisible,
-    bool?       isLoading,
-    bool?       isFullScreen,
+    int? currentPage,
+    double? zoomLevel,
+    bool? isDocumentBookmarked,
+    bool? isToolbarVisible,
+    bool? isAppBarVisible,
+    bool? isLoading,
+    bool? isFullScreen,
     ScrollMode? scrollMode,
-    NightMode?  nightMode,
+    NightMode? nightMode,
   }) =>
       ReaderState(
-        currentPage:          currentPage          ?? this.currentPage,
-        zoomLevel:            zoomLevel            ?? this.zoomLevel,
+        currentPage: currentPage ?? this.currentPage,
+        zoomLevel: zoomLevel ?? this.zoomLevel,
         isDocumentBookmarked: isDocumentBookmarked ?? this.isDocumentBookmarked,
-        isToolbarVisible:     isToolbarVisible     ?? this.isToolbarVisible,
-        isAppBarVisible:      isAppBarVisible      ?? this.isAppBarVisible,
-        isLoading:            isLoading            ?? this.isLoading,
-        isFullScreen:         isFullScreen         ?? this.isFullScreen,
-        scrollMode:           scrollMode           ?? this.scrollMode,
-        nightMode:            nightMode            ?? this.nightMode,
+        isToolbarVisible: isToolbarVisible ?? this.isToolbarVisible,
+        isAppBarVisible: isAppBarVisible ?? this.isAppBarVisible,
+        isLoading: isLoading ?? this.isLoading,
+        isFullScreen: isFullScreen ?? this.isFullScreen,
+        scrollMode: scrollMode ?? this.scrollMode,
+        nightMode: nightMode ?? this.nightMode,
       );
 }
 
@@ -146,29 +148,31 @@ class ReaderState {
 
 abstract final class MockPdfData {
   static const PdfDocumentModel constitutionalLaw = PdfDocumentModel(
-    id:          'y1_s1',
-    title:       'Constitutional Law I',
-    pdfPath:     'assets/pdfs/y1/constitutional_law_1.pdf',
-    totalPages:  248,
+    id: 'y1_s1',
+    title: 'Constitutional Law I',
+    pdfPath: 'assets/pdfs/y1/constitutional_law_1.pdf',
+    totalPages: 248,
     lastReadPage: 42,
     bookmarkedPages: [12, 45, 89, 132, 178],
-    subject:     'Constitutional Law I',
-    yearLabel:   'BALLB 1st Year',
-    description: 'Fundamental Rights, Directive Principles, constitutional history and amendment procedure.',
-    fileSizeBytes: 8_452_096,
+    subject: 'Constitutional Law I',
+    yearLabel: 'BALLB 1st Year',
+    description:
+        'Fundamental Rights, Directive Principles, constitutional history and amendment procedure.',
+    fileSizeBytes: 8452096,
   );
 
   static const PdfDocumentModel contractLaw = PdfDocumentModel(
-    id:          'y1_s2',
-    title:       'Law of Contracts',
-    pdfPath:     'assets/pdfs/y1/law_of_contracts.pdf',
-    totalPages:  312,
+    id: 'y1_s2',
+    title: 'Law of Contracts',
+    pdfPath: 'assets/pdfs/y1/law_of_contracts.pdf',
+    totalPages: 312,
     lastReadPage: 1,
     bookmarkedPages: [18, 67, 134],
-    subject:     'Law of Contracts',
-    yearLabel:   'BALLB 1st Year',
-    description: 'Indian Contract Act 1872 — offer, acceptance, consideration and breach.',
-    fileSizeBytes: 10_223_616,
+    subject: 'Law of Contracts',
+    yearLabel: 'BALLB 1st Year',
+    description:
+        'Indian Contract Act 1872 — offer, acceptance, consideration and breach.',
+    fileSizeBytes: 10223616,
   );
 }
 
@@ -177,9 +181,9 @@ abstract final class MockPdfData {
 // ─────────────────────────────────────────────
 
 class PdfReaderScreen extends StatefulWidget {
-  final PdfDocumentModel      document;
-  final ValueChanged<int>?    onPageChanged;    // Future: persist
-  final VoidCallback?         onBookmarkToggled;
+  final PdfDocumentModel document;
+  final ValueChanged<int>? onPageChanged; // Future: persist
+  final VoidCallback? onBookmarkToggled;
 
   const PdfReaderScreen({
     super.key,
@@ -194,10 +198,9 @@ class PdfReaderScreen extends StatefulWidget {
 
 class _PdfReaderScreenState extends State<PdfReaderScreen>
     with TickerProviderStateMixin {
-
   // ── State ─────────────────────────────────────
   late ReaderState _state;
-  late Set<int>    _bookmarkedPages;
+  late Set<int> _bookmarkedPages;
 
   // ── Page controller ───────────────────────────
   late PageController _pageController;
@@ -213,24 +216,23 @@ class _PdfReaderScreenState extends State<PdfReaderScreen>
   late AnimationController _bookmarkController;
 
   // ── Animations ────────────────────────────────
-  late Animation<Offset>  _appBarSlide;
-  late Animation<double>  _appBarFade;
-  late Animation<Offset>  _toolbarSlide;
-  late Animation<double>  _toolbarFade;
-  late Animation<double>  _contentFade;
-  late Animation<double>  _bookmarkScale;
+  late Animation<Offset> _appBarSlide;
+  late Animation<double> _appBarFade;
+  late Animation<Offset> _toolbarSlide;
+  late Animation<double> _toolbarFade;
+  late Animation<double> _contentFade;
+  late Animation<double> _bookmarkScale;
 
   // ── Computed ──────────────────────────────────
   bool get _isCurrentPageBookmarked =>
       _bookmarkedPages.contains(_state.currentPage);
 
   bool get _isFirstPage => _state.currentPage <= 1;
-  bool get _isLastPage  => _state.currentPage >= widget.document.totalPages;
+  bool get _isLastPage => _state.currentPage >= widget.document.totalPages;
 
-  double get _readingProgress =>
-      widget.document.totalPages > 0
-          ? _state.currentPage / widget.document.totalPages
-          : 0.0;
+  double get _readingProgress => widget.document.totalPages > 0
+      ? _state.currentPage / widget.document.totalPages
+      : 0.0;
 
   // ─────────────────────────────────────────────
   // MARK: — LIFECYCLE
@@ -240,7 +242,8 @@ class _PdfReaderScreenState extends State<PdfReaderScreen>
   void initState() {
     super.initState();
     final doc = widget.document;
-    _state = ReaderState(currentPage: doc.lastReadPage.clamp(1, doc.totalPages));
+    _state =
+        ReaderState(currentPage: doc.lastReadPage.clamp(1, doc.totalPages));
     _bookmarkedPages = Set<int>.from(doc.bookmarkedPages);
 
     _pageController = PageController(
@@ -483,18 +486,17 @@ class _PdfReaderScreenState extends State<PdfReaderScreen>
   @override
   Widget build(BuildContext context) {
     final brightness = Theme.of(context).brightness;
-    final dark       = brightness == Brightness.dark;
-    final topPad     = MediaQuery.of(context).padding.top;
-    final botPad     = MediaQuery.of(context).padding.bottom;
-    final appBarH    = kToolbarHeight;
+    final dark = brightness == Brightness.dark;
+    final topPad = MediaQuery.of(context).padding.top;
+    final botPad = MediaQuery.of(context).padding.bottom;
+    final appBarH = kToolbarHeight;
 
     SystemChrome.setSystemUIOverlayStyle(
       dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
     );
 
     return Scaffold(
-      backgroundColor:
-          dark ? const Color(0xFF1A1A1A) : const Color(0xFFDDDDDD),
+      backgroundColor: dark ? const Color(0xFF1A1A1A) : const Color(0xFFDDDDDD),
       body: GestureDetector(
         onTap: _toggleBars,
         child: Stack(
@@ -515,7 +517,8 @@ class _PdfReaderScreenState extends State<PdfReaderScreen>
             // ── Progress bar ──────────────────────
             Positioned(
               top: topPad + appBarH - 2,
-              left: 0, right: 0,
+              left: 0,
+              right: 0,
               child: SlideTransition(
                 position: _appBarSlide,
                 child: _ReadingProgressBar(
@@ -527,7 +530,9 @@ class _PdfReaderScreenState extends State<PdfReaderScreen>
 
             // ── Glass AppBar ──────────────────────
             Positioned(
-              top: 0, left: 0, right: 0,
+              top: 0,
+              left: 0,
+              right: 0,
               child: SlideTransition(
                 position: _appBarSlide,
                 child: FadeTransition(
@@ -561,12 +566,8 @@ class _PdfReaderScreenState extends State<PdfReaderScreen>
   // ─────────────────────────────────────────────
 
   Widget _buildPdfAppBar(bool dark, double topPad) {
-    final tint = dark
-        ? const Color(0xCC1C1C1E)
-        : const Color(0xE6FFFFFF);
-    final border = dark
-        ? const Color(0x1AFFFFFF)
-        : const Color(0x1AC6C6C8);
+    final tint = dark ? const Color(0xCC1C1C1E) : const Color(0xE6FFFFFF);
+    final border = dark ? const Color(0x1AFFFFFF) : const Color(0x1AC6C6C8);
 
     return ClipRect(
       child: BackdropFilter(
@@ -669,22 +670,17 @@ class _PdfReaderScreenState extends State<PdfReaderScreen>
   // MARK: — BOTTOM TOOLBAR
   // ─────────────────────────────────────────────
 
-  Widget _buildBottomToolbar(bool dark, BuildContext context) =>
-      ClipRRect(
+  Widget _buildBottomToolbar(bool dark, BuildContext context) => ClipRRect(
         borderRadius: AppRadius.xxlAll,
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: AppBlur.xl, sigmaY: AppBlur.xl),
           child: Container(
             height: 60,
             decoration: BoxDecoration(
-              color: dark
-                  ? const Color(0xD91C1C1E)
-                  : const Color(0xDFFFFFFF),
+              color: dark ? const Color(0xD91C1C1E) : const Color(0xDFFFFFFF),
               borderRadius: AppRadius.xxlAll,
               border: Border.all(
-                color: dark
-                    ? const Color(0x26FFFFFF)
-                    : const Color(0x33FFFFFF),
+                color: dark ? const Color(0x26FFFFFF) : const Color(0x33FFFFFF),
                 width: 0.5,
               ),
               boxShadow: [
@@ -769,9 +765,9 @@ class _PdfReaderScreenState extends State<PdfReaderScreen>
 
 class _PdfPlaceholderView extends StatelessWidget {
   final PdfDocumentModel document;
-  final int              currentPage;
-  final bool             isDark;
-  final PageController   pageController;
+  final int currentPage;
+  final bool isDark;
+  final PageController pageController;
   final ValueChanged<int> onPageChanged;
 
   const _PdfPlaceholderView({
@@ -784,9 +780,7 @@ class _PdfPlaceholderView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = isDark
-        ? const Color(0xFF1A1A1A)
-        : const Color(0xFFD0D0D0);
+    final bgColor = isDark ? const Color(0xFF1A1A1A) : const Color(0xFFD0D0D0);
 
     return Container(
       color: bgColor,
@@ -824,10 +818,10 @@ class _PdfPlaceholderView extends StatelessWidget {
 // ─────────────────────────────────────────────
 
 class _SimulatedPdfPage extends StatelessWidget {
-  final int    pageNumber;
-  final int    totalPages;
+  final int pageNumber;
+  final int totalPages;
   final String title;
-  final bool   isDark;
+  final bool isDark;
 
   const _SimulatedPdfPage({
     required this.pageNumber,
@@ -836,10 +830,10 @@ class _SimulatedPdfPage extends StatelessWidget {
     required this.isDark,
   });
 
-  bool get _isCoverPage      => pageNumber == 1;
-  bool get _isTocPage        => pageNumber == 2 || pageNumber == 3;
-  bool get _isChapterStart   => (pageNumber - 4) % 22 == 0 && pageNumber > 3;
-  int  get _patternSeed      => pageNumber % 7;
+  bool get _isCoverPage => pageNumber == 1;
+  bool get _isTocPage => pageNumber == 2 || pageNumber == 3;
+  bool get _isChapterStart => (pageNumber - 4) % 22 == 0 && pageNumber > 3;
+  int get _patternSeed => pageNumber % 7;
 
   // Line width fractions per pattern
   static const List<List<double>> _patterns = [
@@ -854,20 +848,17 @@ class _SimulatedPdfPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pageColor = isDark
-        ? const Color(0xFF1E1E1E)
-        : const Color(0xFFFFFEFA);
-    final textColor = isDark
-        ? const Color(0xFFE0E0DE)
-        : const Color(0xFF1A1A18);
-    final lineColor =
-        textColor.withOpacity(isDark ? 0.14 : 0.12);
-    final accentColor =
-        isDark ? AppColors.accentLight : AppColors.accent;
+    final pageColor =
+        isDark ? const Color(0xFF1E1E1E) : const Color(0xFFFFFEFA);
+    final textColor =
+        isDark ? const Color(0xFFE0E0DE) : const Color(0xFF1A1A18);
+    final lineColor = textColor.withOpacity(isDark ? 0.14 : 0.12);
+    final accentColor = isDark ? AppColors.accentLight : AppColors.accent;
 
     return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: 16.0, vertical: 20.0,
+        horizontal: 16.0,
+        vertical: 20.0,
       ),
       child: Container(
         decoration: BoxDecoration(
@@ -917,19 +908,21 @@ class _SimulatedPdfPage extends StatelessWidget {
             const Spacer(flex: 2),
             Container(width: 48, height: 4, color: accent),
             const SizedBox(height: 24),
-            Container(width: w * 0.75, height: 22,
+            Container(
+                width: w * 0.75,
+                height: 22,
                 color: text.withOpacity(0.85),
                 margin: const EdgeInsets.only(bottom: 12)),
-            Container(width: w * 0.55, height: 16,
-                color: text.withOpacity(0.65)),
+            Container(
+                width: w * 0.55, height: 16, color: text.withOpacity(0.65)),
             const SizedBox(height: 48),
             _lineDivider(w, line),
             const SizedBox(height: 24),
-            Container(width: w * 0.40, height: 10,
-                color: text.withOpacity(0.35)),
+            Container(
+                width: w * 0.40, height: 10, color: text.withOpacity(0.35)),
             const SizedBox(height: 8),
-            Container(width: w * 0.30, height: 10,
-                color: text.withOpacity(0.25)),
+            Container(
+                width: w * 0.30, height: 10, color: text.withOpacity(0.25)),
             const Spacer(flex: 3),
             _pageNumberBar(text),
           ],
@@ -943,21 +936,27 @@ class _SimulatedPdfPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 12),
-            Container(width: w * 0.45, height: 16,
-                color: accent.withOpacity(0.85)),
+            Container(
+                width: w * 0.45, height: 16, color: accent.withOpacity(0.85)),
             const SizedBox(height: 24),
             _lineDivider(w, line),
             const SizedBox(height: 20),
-            ...List.generate(12, (i) => Padding(
-              padding: const EdgeInsets.only(bottom: 14),
-              child: Row(children: [
-                Container(width: w * (0.50 + (i % 3) * 0.08), height: 9,
-                    color: text.withOpacity(0.15)),
-                const Spacer(),
-                Container(width: 24, height: 9,
-                    color: text.withOpacity(0.15)),
-              ]),
-            )),
+            ...List.generate(
+                12,
+                (i) => Padding(
+                      padding: const EdgeInsets.only(bottom: 14),
+                      child: Row(children: [
+                        Container(
+                            width: w * (0.50 + (i % 3) * 0.08),
+                            height: 9,
+                            color: text.withOpacity(0.15)),
+                        const Spacer(),
+                        Container(
+                            width: 24,
+                            height: 9,
+                            color: text.withOpacity(0.15)),
+                      ]),
+                    )),
             const Spacer(),
             _pageNumberBar(text),
           ],
@@ -971,18 +970,19 @@ class _SimulatedPdfPage extends StatelessWidget {
           children: [
             const Spacer(flex: 2),
             Container(
-              width: 32, height: 3,
+              width: 32,
+              height: 3,
               color: accent.withOpacity(0.60),
             ),
             const SizedBox(height: 16),
-            Container(width: w * 0.35, height: 11,
-                color: text.withOpacity(0.35)),
+            Container(
+                width: w * 0.35, height: 11, color: text.withOpacity(0.35)),
             const SizedBox(height: 12),
-            Container(width: w * 0.70, height: 20,
-                color: text.withOpacity(0.85)),
+            Container(
+                width: w * 0.70, height: 20, color: text.withOpacity(0.85)),
             const SizedBox(height: 8),
-            Container(width: w * 0.55, height: 20,
-                color: text.withOpacity(0.70)),
+            Container(
+                width: w * 0.55, height: 20, color: text.withOpacity(0.70)),
             const SizedBox(height: 32),
             _lineDivider(w * 0.30, line),
             const Spacer(flex: 3),
@@ -1000,11 +1000,10 @@ class _SimulatedPdfPage extends StatelessWidget {
         children: [
           // Running header
           Row(children: [
-            Container(width: w * 0.30, height: 8,
-                color: text.withOpacity(0.22)),
+            Container(
+                width: w * 0.30, height: 8, color: text.withOpacity(0.22)),
             const Spacer(),
-            Container(width: 24, height: 8,
-                color: text.withOpacity(0.18)),
+            Container(width: 24, height: 8, color: text.withOpacity(0.18)),
           ]),
           const SizedBox(height: 12),
           _lineDivider(w, line),
@@ -1012,8 +1011,8 @@ class _SimulatedPdfPage extends StatelessWidget {
 
           // Section heading (occasional)
           if (_patternSeed < 2) ...[
-            Container(width: w * 0.50, height: 13,
-                color: text.withOpacity(0.75)),
+            Container(
+                width: w * 0.50, height: 13, color: text.withOpacity(0.75)),
             const SizedBox(height: 16),
           ],
 
@@ -1060,17 +1059,19 @@ class _SimulatedPdfPage extends StatelessWidget {
                       margin: const EdgeInsets.only(bottom: 12),
                     ),
                   ),
-                  ...List.generate(3, (i) => Padding(
-                    padding: const EdgeInsets.only(left: 20, bottom: 8),
-                    child: Container(
-                      width: w * [0.85, 0.92, 0.60][i],
-                      height: 9,
-                      decoration: BoxDecoration(
-                        color: text.withOpacity(0.11),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                  )),
+                  ...List.generate(
+                      3,
+                      (i) => Padding(
+                            padding: const EdgeInsets.only(left: 20, bottom: 8),
+                            child: Container(
+                              width: w * [0.85, 0.92, 0.60][i],
+                              height: 9,
+                              decoration: BoxDecoration(
+                                color: text.withOpacity(0.11),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ),
+                          )),
                 ],
               ],
             ),
@@ -1086,7 +1087,9 @@ class _SimulatedPdfPage extends StatelessWidget {
   }
 
   Widget _lineDivider(double w, Color color) => Container(
-        width: w, height: 0.5, color: color,
+        width: w,
+        height: 0.5,
+        color: color,
       );
 
   Widget _pageNumberBar(Color text) => Center(
@@ -1121,7 +1124,9 @@ class _ReadingProgressBar extends StatelessWidget {
               Container(
                 width: constraints.maxWidth,
                 height: 2.5,
-                color: (isDark ? AppColors.darkSeparator : AppColors.lightSeparator)
+                color: (isDark
+                        ? AppColors.darkSeparator
+                        : AppColors.lightSeparator)
                     .withOpacity(0.5),
               ),
               AnimatedContainer(
@@ -1149,8 +1154,8 @@ class _ReadingProgressBar extends StatelessWidget {
 // ─────────────────────────────────────────────
 
 class _PageIndicator extends StatelessWidget {
-  final int  currentPage;
-  final int  totalPages;
+  final int currentPage;
+  final int totalPages;
   final bool isDark;
 
   const _PageIndicator({
@@ -1207,8 +1212,8 @@ class _PageIndicator extends StatelessWidget {
 
 class _ToolbarNavButton extends StatefulWidget {
   final IconData icon;
-  final bool     enabled;
-  final bool     isDark;
+  final bool enabled;
+  final bool isDark;
   final VoidCallback onTap;
 
   const _ToolbarNavButton({
@@ -1248,7 +1253,8 @@ class _ToolbarNavButtonState extends State<_ToolbarNavButton> {
           duration: const Duration(milliseconds: 80),
           opacity: _pressed ? 0.45 : (widget.enabled ? 1.0 : 0.35),
           child: SizedBox(
-            width: 52, height: 60,
+            width: 52,
+            height: 60,
             child: Center(
               child: Icon(widget.icon, size: 26, color: color),
             ),
@@ -1264,10 +1270,10 @@ class _ToolbarNavButtonState extends State<_ToolbarNavButton> {
 // ─────────────────────────────────────────────
 
 class _ToolbarIconButton extends StatefulWidget {
-  final IconData  icon;
-  final bool      isDark;
-  final Color?    iconColor;
-  final String?   tooltip;
+  final IconData icon;
+  final bool isDark;
+  final Color? iconColor;
+  final String? tooltip;
   final VoidCallback onTap;
 
   const _ToolbarIconButton({
@@ -1303,7 +1309,8 @@ class _ToolbarIconButtonState extends State<_ToolbarIconButton> {
         duration: const Duration(milliseconds: 80),
         opacity: _pressed ? 0.45 : 1.0,
         child: SizedBox(
-          width: 48, height: 60,
+          width: 48,
+          height: 60,
           child: Center(
             child: Icon(widget.icon, size: 21, color: color),
           ),
@@ -1323,10 +1330,9 @@ class _ToolbarDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        width: 0.5, height: 28,
-        color: isDark
-            ? const Color(0x26FFFFFF)
-            : const Color(0x20000000),
+        width: 0.5,
+        height: 28,
+        color: isDark ? const Color(0x26FFFFFF) : const Color(0x20000000),
       );
 }
 
@@ -1335,9 +1341,9 @@ class _ToolbarDivider extends StatelessWidget {
 // ─────────────────────────────────────────────
 
 class _GlassIconButton extends StatefulWidget {
-  final IconData  icon;
-  final bool      isDark;
-  final Color?    iconColor;
+  final IconData icon;
+  final bool isDark;
+  final Color? iconColor;
   final VoidCallback onTap;
 
   const _GlassIconButton({
@@ -1370,17 +1376,24 @@ class _GlassIconButtonState extends State<_GlassIconButton>
   }
 
   @override
-  void dispose() { _press.dispose(); super.dispose(); }
+  void dispose() {
+    _press.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) => ScaleTransition(
         scale: _scale,
         child: GestureDetector(
           onTapDown: (_) => _press.forward(),
-          onTapUp: (_) { _press.reverse(); widget.onTap(); },
+          onTapUp: (_) {
+            _press.reverse();
+            widget.onTap();
+          },
           onTapCancel: () => _press.reverse(),
           child: Container(
-            width: 36, height: 36,
+            width: 36,
+            height: 36,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: widget.isDark
@@ -1388,7 +1401,8 @@ class _GlassIconButtonState extends State<_GlassIconButton>
                   : const Color(0x18000000),
             ),
             child: Icon(
-              widget.icon, size: 17,
+              widget.icon,
+              size: 17,
               color: widget.iconColor ??
                   (widget.isDark
                       ? AppColors.darkPrimaryText
@@ -1427,8 +1441,7 @@ class _JumpToPageDialogState extends State<_JumpToPageDialog> {
   @override
   void initState() {
     super.initState();
-    _controller =
-        TextEditingController(text: widget.currentPage.toString());
+    _controller = TextEditingController(text: widget.currentPage.toString());
   }
 
   @override
@@ -1467,14 +1480,10 @@ class _JumpToPageDialogState extends State<_JumpToPageDialog> {
           child: Container(
             width: 280,
             decoration: BoxDecoration(
-              color: dark
-                  ? const Color(0xF01C1C1E)
-                  : const Color(0xF0FFFFFF),
+              color: dark ? const Color(0xF01C1C1E) : const Color(0xF0FFFFFF),
               borderRadius: AppRadius.xlAll,
               border: Border.all(
-                color: dark
-                    ? const Color(0x26FFFFFF)
-                    : const Color(0x26000000),
+                color: dark ? const Color(0x26FFFFFF) : const Color(0x26000000),
                 width: 0.5,
               ),
               boxShadow: dark ? AppShadows.darkLg : AppShadows.lightLg,
@@ -1665,13 +1674,13 @@ class _MoreMenuSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = [
-      (Icons.search_rounded,          'Search in Document',  false),
-      (Icons.list_alt_rounded,        'Table of Contents',   false),
+      (Icons.search_rounded, 'Search in Document', false),
+      (Icons.list_alt_rounded, 'Table of Contents', false),
       (Icons.bookmark_border_rounded, 'All Bookmarked Pages', false),
-      (Icons.zoom_in_rounded,         'Zoom In',             false),
-      (Icons.zoom_out_rounded,        'Zoom Out',            false),
-      (Icons.brightness_medium_rounded, 'Reading Mode',      false),
-      (Icons.share_outlined,          'Share',               false),
+      (Icons.zoom_in_rounded, 'Zoom In', false),
+      (Icons.zoom_out_rounded, 'Zoom Out', false),
+      (Icons.brightness_medium_rounded, 'Reading Mode', false),
+      (Icons.share_outlined, 'Share', false),
     ];
 
     return Column(
@@ -1681,9 +1690,8 @@ class _MoreMenuSheet extends StatelessWidget {
         Text(
           'Options',
           style: AppTypography.headlineSmall.copyWith(
-            color: isDark
-                ? AppColors.darkPrimaryText
-                : AppColors.lightPrimaryText,
+            color:
+                isDark ? AppColors.darkPrimaryText : AppColors.lightPrimaryText,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -1702,17 +1710,16 @@ class _MoreMenuSheet extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.all(AppSpacing.md),
           decoration: BoxDecoration(
-            color: isDark
-                ? const Color(0x14FFFFFF)
-                : const Color(0x08000000),
+            color: isDark ? const Color(0x14FFFFFF) : const Color(0x08000000),
             borderRadius: AppRadius.mdAll,
           ),
           child: Row(
             children: [
-              Icon(Icons.info_outline_rounded, size: 14,
-                color: isDark
-                    ? AppColors.darkSecondaryText
-                    : AppColors.lightSecondaryText),
+              Icon(Icons.info_outline_rounded,
+                  size: 14,
+                  color: isDark
+                      ? AppColors.darkSecondaryText
+                      : AppColors.lightSecondaryText),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
@@ -1778,10 +1785,11 @@ class _MenuRowState extends State<_MenuRow> {
           ),
           child: Row(
             children: [
-              Icon(widget.icon, size: 18,
-                color: widget.isDark
-                    ? AppColors.darkSecondaryText
-                    : AppColors.lightSecondaryText),
+              Icon(widget.icon,
+                  size: 18,
+                  color: widget.isDark
+                      ? AppColors.darkSecondaryText
+                      : AppColors.lightSecondaryText),
               const SizedBox(width: AppSpacing.md),
               Text(
                 widget.label,
@@ -1793,10 +1801,11 @@ class _MenuRowState extends State<_MenuRow> {
                 ),
               ),
               const Spacer(),
-              Icon(Icons.chevron_right_rounded, size: 14,
-                color: widget.isDark
-                    ? AppColors.darkTertiaryText
-                    : AppColors.lightTertiaryText),
+              Icon(Icons.chevron_right_rounded,
+                  size: 14,
+                  color: widget.isDark
+                      ? AppColors.darkTertiaryText
+                      : AppColors.lightTertiaryText),
             ],
           ),
         ),

@@ -16,7 +16,7 @@ import 'database_models.dart';
 // ─────────────────────────────────────────────
 
 class DatabaseException implements Exception {
-  final String  message;
+  final String message;
   final Object? cause;
 
   const DatabaseException({required this.message, this.cause});
@@ -34,23 +34,23 @@ class DatabaseService {
   // ── Singleton ─────────────────────────────────
   static final DatabaseService _instance = DatabaseService._internal();
 
-  factory DatabaseService()               => _instance;
-  static DatabaseService get instance     => _instance;
+  factory DatabaseService() => _instance;
+  static DatabaseService get instance => _instance;
   DatabaseService._internal();
 
   // ── Isar instance ─────────────────────────────
   Isar? _isar;
 
   // ── Initialisation guard ──────────────────────
-  bool              _isInitialized = false;
-  Completer<void>?  _initCompleter;
+  bool _isInitialized = false;
+  Completer<void>? _initCompleter;
 
   // ─────────────────────────────────────────────
   // MARK: — STATE GETTERS
   // ─────────────────────────────────────────────
 
   bool get isInitialized => _isInitialized;
-  bool get isOpen        => _isar?.isOpen ?? false;
+  bool get isOpen => _isar?.isOpen ?? false;
 
   /// Returns the Isar instance.
   /// Throws [DatabaseException] if not yet initialised.
@@ -76,8 +76,8 @@ class DatabaseService {
   /// Safe to call multiple times — subsequent calls wait for the first
   /// to complete without opening a second instance.
   Future<void> initialize({
-    String  dbName  = 'law_briefly',
-    bool    inspector = false,  // Isar Inspector for debug (macOS/Windows only)
+    String dbName = 'law_briefly',
+    bool inspector = false, // Isar Inspector for debug (macOS/Windows only)
   }) async {
     // Already open
     if (_isInitialized && (_isar?.isOpen ?? false)) {
@@ -97,9 +97,9 @@ class DatabaseService {
       final dir = await _resolveDirectory();
 
       _isar = await Isar.open(
-        isarSchemas,
+        coreIsarSchemas,
         directory: dir.path,
-        name:      dbName,
+        name: dbName,
         inspector: inspector && !kReleaseMode,
       );
 
@@ -108,14 +108,15 @@ class DatabaseService {
 
       debugPrint(
         '[DatabaseService] Opened at ${dir.path}/$dbName.isar '
-        '(${isarSchemas.length} collections).',
+        '(${coreIsarSchemas.length} collections).',
       );
     } catch (e, st) {
       _initCompleter!.completeError(e, st);
-      _initCompleter  = null;
-      _isInitialized  = false;
+      _initCompleter = null;
+      _isInitialized = false;
       debugPrint('[DatabaseService] Initialisation failed: $e');
-      throw DatabaseException(message: 'Failed to open Isar database.', cause: e);
+      throw DatabaseException(
+          message: 'Failed to open Isar database.', cause: e);
     } finally {
       if (_initCompleter?.isCompleted ?? false) {
         _initCompleter = null;
@@ -135,7 +136,7 @@ class DatabaseService {
     }
     try {
       await _isar!.close();
-      _isar          = null;
+      _isar = null;
       _isInitialized = false;
       debugPrint('[DatabaseService] Closed successfully.');
     } catch (e) {
@@ -166,7 +167,7 @@ class DatabaseService {
     }
     // Desktop / test fallback
     final base = await getApplicationSupportDirectory();
-    final dir  = Directory('${base.path}/law_briefly_db');
+    final dir = Directory('${base.path}/law_briefly_db');
     if (!dir.existsSync()) await dir.create(recursive: true);
     return dir;
   }

@@ -12,7 +12,7 @@ enum BookmarkType {
   constitutionArticle;
 
   String get displayLabel => switch (this) {
-        BookmarkType.actSection          => 'Act Section',
+        BookmarkType.actSection => 'Act Section',
         BookmarkType.constitutionArticle => 'Constitution Article',
       };
 }
@@ -24,6 +24,8 @@ enum BookmarkType {
 @collection
 @Name('bookmarks')
 class BookmarkModel {
+  BookmarkModel();
+
   // ── Isar primary key ─────────────────────────
   Id id = Isar.autoIncrement;
 
@@ -57,46 +59,44 @@ class BookmarkModel {
   // ── Factory ──────────────────────────────────
 
   static BookmarkModel create({
-    required String       contentId,
-    required String       title,
-    required String       number,
-    required String       sourceName,
+    required String contentId,
+    required String title,
+    required String number,
+    required String sourceName,
     required BookmarkType bookmarkType,
-    bool                  isFavorite = false,
+    bool isFavorite = false,
   }) {
     return BookmarkModel()
-      ..contentId    = contentId
-      ..title        = title
-      ..number       = number
-      ..sourceName   = sourceName
+      ..contentId = contentId
+      ..title = title
+      ..number = number
+      ..sourceName = sourceName
       ..bookmarkType = bookmarkType
-      ..createdAt    = DateTime.now()
-      ..isFavorite   = isFavorite;
+      ..createdAt = DateTime.now()
+      ..isFavorite = isFavorite;
   }
 
   // ── JSON support ─────────────────────────────
 
   Map<String, dynamic> toJson() => {
-        'id':            id,
-        'content_id':    contentId,
-        'title':         title,
-        'number':        number,
-        'source_name':   sourceName,
+        'id': id,
+        'content_id': contentId,
+        'title': title,
+        'number': number,
+        'source_name': sourceName,
         'bookmark_type': bookmarkType.name,
-        'created_at':    createdAt.toIso8601String(),
-        'is_favorite':   isFavorite,
+        'created_at': createdAt.toIso8601String(),
+        'is_favorite': isFavorite,
       };
 
-  factory BookmarkModel.fromJson(Map<String, dynamic> json) =>
-      BookmarkModel()
-        ..contentId    = json['content_id']    as String
-        ..title        = json['title']         as String
-        ..number       = json['number']        as String
-        ..sourceName   = json['source_name']   as String
-        ..bookmarkType = BookmarkType.values.byName(
-            json['bookmark_type'] as String)
-        ..createdAt    = DateTime.parse(json['created_at'] as String)
-        ..isFavorite   = json['is_favorite']   as bool? ?? false;
+  factory BookmarkModel.fromJson(Map<String, dynamic> json) => BookmarkModel()
+    ..contentId = json['content_id'] as String
+    ..title = json['title'] as String
+    ..number = json['number'] as String
+    ..sourceName = json['source_name'] as String
+    ..bookmarkType = BookmarkType.values.byName(json['bookmark_type'] as String)
+    ..createdAt = DateTime.parse(json['created_at'] as String)
+    ..isFavorite = json['is_favorite'] as bool? ?? false;
 
   @override
   String toString() =>

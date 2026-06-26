@@ -34,13 +34,13 @@ enum BookmarkType {
 // ─────────────────────────────────────────────
 
 abstract class BookmarkRepository {
-  Future<List<Bookmark>>  getBookmarks();
-  Future<Bookmark?>       getBookmarkByContentId(String contentId);
-  Future<void>            saveBookmark(Bookmark bookmark);
-  Future<void>            deleteBookmark(String bookmarkId);
-  Future<bool>            existsByContentId(String contentId);
-  Stream<List<Bookmark>>  watchBookmarks();
-  Future<void>            clear();
+  Future<List<Bookmark>> getBookmarks();
+  Future<Bookmark?> getBookmarkByContentId(String contentId);
+  Future<void> saveBookmark(Bookmark bookmark);
+  Future<void> deleteBookmark(String bookmarkId);
+  Future<bool> existsByContentId(String contentId);
+  Stream<List<Bookmark>> watchBookmarks();
+  Future<void> clear();
 }
 
 // ─────────────────────────────────────────────
@@ -117,6 +117,7 @@ class _InMemoryBookmarkRepository implements BookmarkRepository {
 class BookmarkService {
   // ── Singleton ─────────────────────────────────
   static final BookmarkService _instance = BookmarkService._internal();
+  static BookmarkService get instance => _instance;
   factory BookmarkService() => _instance;
   factory BookmarkService.withRepository(BookmarkRepository repository) {
     _instance._repository = repository;
@@ -143,17 +144,16 @@ class BookmarkService {
   }
 
   /// Returns a live stream of all bookmarks.
-  Stream<List<Bookmark>> watchBookmarks() =>
-      _repository.watchBookmarks();
+  Stream<List<Bookmark>> watchBookmarks() => _repository.watchBookmarks();
 
   /// Adds a new bookmark. Does nothing if already bookmarked.
   Future<Bookmark?> addBookmark({
-    required String      contentId,
+    required String contentId,
     required BookmarkType type,
-    String?              displayTitle,
-    String?              displaySubtitle,
-    String?              sourceActId,
-    String?              sourcePartId,
+    String? displayTitle,
+    String? displaySubtitle,
+    String? sourceActId,
+    String? sourcePartId,
   }) async {
     final alreadyExists = await _repository.existsByContentId(contentId);
     if (alreadyExists) {
@@ -162,14 +162,14 @@ class BookmarkService {
     }
 
     final bookmark = Bookmark(
-      id:              _generateId(contentId, type),
+      id: _generateId(contentId, type),
       linkedContentId: contentId,
-      contentType:     type.toContentType(),
-      createdAt:       DateTime.now(),
-      displayTitle:    displayTitle,
+      contentType: type.toContentType(),
+      createdAt: DateTime.now(),
+      displayTitle: displayTitle,
       displaySubtitle: displaySubtitle,
-      sourceActId:     sourceActId,
-      sourcePartId:    sourcePartId,
+      sourceActId: sourceActId,
+      sourcePartId: sourcePartId,
     );
 
     await _repository.saveBookmark(bookmark);
@@ -199,12 +199,12 @@ class BookmarkService {
   /// Toggles bookmark for the given content.
   /// Returns true if bookmark was added, false if removed.
   Future<bool> toggleBookmark({
-    required String       contentId,
+    required String contentId,
     required BookmarkType type,
-    String?               displayTitle,
-    String?               displaySubtitle,
-    String?               sourceActId,
-    String?               sourcePartId,
+    String? displayTitle,
+    String? displaySubtitle,
+    String? sourceActId,
+    String? sourcePartId,
   }) async {
     final bookmarked = await isBookmarked(contentId);
 
@@ -213,12 +213,12 @@ class BookmarkService {
       return false;
     } else {
       await addBookmark(
-        contentId:       contentId,
-        type:            type,
-        displayTitle:    displayTitle,
+        contentId: contentId,
+        type: type,
+        displayTitle: displayTitle,
         displaySubtitle: displaySubtitle,
-        sourceActId:     sourceActId,
-        sourcePartId:    sourcePartId,
+        sourceActId: sourceActId,
+        sourcePartId: sourcePartId,
       );
       return true;
     }
@@ -231,9 +231,7 @@ class BookmarkService {
   /// Returns bookmarks filtered by type.
   Future<List<Bookmark>> getBookmarksByType(BookmarkType type) async {
     final all = await getBookmarks();
-    return all
-        .where((b) => b.contentType == type.toContentType())
-        .toList();
+    return all.where((b) => b.contentType == type.toContentType()).toList();
   }
 
   /// Returns total bookmark count.

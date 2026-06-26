@@ -3,6 +3,8 @@
 
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+// ignore: avoid_relative_lib_imports
+import '../../data/repositories/legal_repository.dart';
 import 'search_models.dart';
 import 'search_service.dart';
 
@@ -12,37 +14,37 @@ import 'search_service.dart';
 
 class SearchState {
   final List<SearchResult> results;
-  final String             query;
-  final bool               isLoading;
-  final bool               hasSearched;
-  final String?            error;
+  final String query;
+  final bool isLoading;
+  final bool hasSearched;
+  final String? error;
 
   const SearchState({
-    this.results    = const [],
-    this.query      = '',
-    this.isLoading  = false,
+    this.results = const [],
+    this.query = '',
+    this.isLoading = false,
     this.hasSearched = false,
     this.error,
   });
 
-  bool get isEmpty         => results.isEmpty;
-  bool get isNotEmpty      => results.isNotEmpty;
-  bool get isIdle          => !hasSearched && !isLoading;
-  bool get showEmpty       => hasSearched && results.isEmpty && !isLoading;
+  bool get isEmpty => results.isEmpty;
+  bool get isNotEmpty => results.isNotEmpty;
+  bool get isIdle => !hasSearched && !isLoading;
+  bool get showEmpty => hasSearched && results.isEmpty && !isLoading;
 
   SearchState copyWith({
     List<SearchResult>? results,
-    String?             query,
-    bool?               isLoading,
-    bool?               hasSearched,
-    Object?             error = _sentinel,
+    String? query,
+    bool? isLoading,
+    bool? hasSearched,
+    Object? error = _sentinel,
   }) =>
       SearchState(
-        results:     results     ?? this.results,
-        query:       query       ?? this.query,
-        isLoading:   isLoading   ?? this.isLoading,
+        results: results ?? this.results,
+        query: query ?? this.query,
+        isLoading: isLoading ?? this.isLoading,
         hasSearched: hasSearched ?? this.hasSearched,
-        error:       error == _sentinel ? this.error : error as String?,
+        error: error == _sentinel ? this.error : error as String?,
       );
 }
 
@@ -61,8 +63,8 @@ class SearchController extends ChangeNotifier {
   SearchState get state => _state;
 
   // ── Debounce ──────────────────────────────────
-  Timer?                          _debounce;
-  static const Duration           _debounceDuration = Duration(milliseconds: 280);
+  Timer? _debounce;
+  static const Duration _debounceDuration = Duration(milliseconds: 280);
 
   // ─────────────────────────────────────────────
   // MARK: — CONSTRUCTOR
@@ -95,7 +97,10 @@ class SearchController extends ChangeNotifier {
   Future<void> searchNow(String query) async {
     _debounce?.cancel();
     final q = query.trim();
-    if (q.isEmpty) { clearSearch(); return; }
+    if (q.isEmpty) {
+      clearSearch();
+      return;
+    }
     _setState(_state.copyWith(query: query, isLoading: true, error: null));
     await _performSearch(q);
   }
@@ -116,11 +121,11 @@ class SearchController extends ChangeNotifier {
   // ─────────────────────────────────────────────
 
   List<SearchResult> currentResults() => List.unmodifiable(_state.results);
-  String             currentQuery()   => _state.query;
-  bool               get isLoading    => _state.isLoading;
-  bool               get hasResults   => _state.isNotEmpty;
-  bool               get hasError     => _state.error != null;
-  String?            get error        => _state.error;
+  String currentQuery() => _state.query;
+  bool get isLoading => _state.isLoading;
+  bool get hasResults => _state.isNotEmpty;
+  bool get hasError => _state.error != null;
+  String? get error => _state.error;
 
   // ─────────────────────────────────────────────
   // MARK: — PRIVATE
@@ -130,29 +135,33 @@ class SearchController extends ChangeNotifier {
     try {
       final results = await _service.searchActs(query);
       _setState(_state.copyWith(
-        results:     results,
-        isLoading:   false,
+        results: results,
+        isLoading: false,
         hasSearched: true,
-        error:       null,
+        error: null,
       ));
       debugPrint('[SearchController] "$query" → ${results.length} results.');
     } catch (e) {
       debugPrint('[SearchController] Error: $e');
       _setState(_state.copyWith(
-        results:     const [],
-        isLoading:   false,
+        results: const [],
+        isLoading: false,
         hasSearched: true,
-        error:       'Search failed. Please try again.',
+        error: 'Search failed. Please try again.',
       ));
     }
   }
 
-  void _setState(SearchState s) { _state = s; notifyListeners(); }
+  void _setState(SearchState s) {
+    _state = s;
+    notifyListeners();
+  }
 
   @override
-  void dispose() { _debounce?.cancel(); super.dispose(); }
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
 }
 
-// ignore: avoid_relative_lib_imports
-import '../../data/repositories/legal_repository.dart';
 final _defaultRepository = LocalLegalRepository();

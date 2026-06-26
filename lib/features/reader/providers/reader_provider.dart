@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import '../../../data/models/legal_models.dart';
 import '../services/reader_content_service.dart';
 import '../data/case_law_repository_impl.dart';
-import '../../acts/data/acts_repository_impl.dart';
+import '../../acts/repositories/acts_repository_impl.dart';
 import '../../constitution/data/constitution_repository_impl.dart';
 
 // ─────────────────────────────────────────────
@@ -12,37 +12,40 @@ import '../../constitution/data/constitution_repository_impl.dart';
 // ─────────────────────────────────────────────
 
 class ReaderState {
-  final bool               isLoading;
-  final String?            errorMessage;
+  final bool isLoading;
+  final String? errorMessage;
   final ReaderContentData? currentContent;
-  final List<CaseLaw>      linkedCaseLaws;
+  final List<CaseLaw> linkedCaseLaws;
 
   const ReaderState({
-    this.isLoading      = false,
-    this.errorMessage   = null,
+    this.isLoading = false,
+    this.errorMessage = null,
     this.currentContent = null,
     this.linkedCaseLaws = const [],
   });
 
-  bool get hasContent  => currentContent != null;
-  bool get hasError    => errorMessage != null;
+  bool get hasContent => currentContent != null;
+  bool get hasError => errorMessage != null;
   bool get hasCaseLaws => linkedCaseLaws.isNotEmpty;
-  bool get canGoNext   => currentContent?.hasNext     ?? false;
-  bool get canGoPrev   => currentContent?.hasPrevious ?? false;
-  bool get isIdle      => !isLoading && currentContent == null && errorMessage == null;
+  bool get canGoNext => currentContent?.hasNext ?? false;
+  bool get canGoPrev => currentContent?.hasPrevious ?? false;
+  bool get isIdle =>
+      !isLoading && currentContent == null && errorMessage == null;
 
   ReaderState copyWith({
-    bool?               isLoading,
-    Object?             errorMessage   = _sentinel,
-    Object?             currentContent = _sentinel,
-    List<CaseLaw>?      linkedCaseLaws,
+    bool? isLoading,
+    Object? errorMessage = _sentinel,
+    Object? currentContent = _sentinel,
+    List<CaseLaw>? linkedCaseLaws,
   }) =>
       ReaderState(
-        isLoading:      isLoading      ?? this.isLoading,
-        errorMessage:   errorMessage   == _sentinel
-            ? this.errorMessage   : errorMessage as String?,
+        isLoading: isLoading ?? this.isLoading,
+        errorMessage: errorMessage == _sentinel
+            ? this.errorMessage
+            : errorMessage as String?,
         currentContent: currentContent == _sentinel
-            ? this.currentContent : currentContent as ReaderContentData?,
+            ? this.currentContent
+            : currentContent as ReaderContentData?,
         linkedCaseLaws: linkedCaseLaws ?? this.linkedCaseLaws,
       );
 
@@ -60,9 +63,9 @@ const Object _sentinel = Object();
 
 final readerContentServiceProvider = Provider<ReaderContentService>((ref) {
   return ReaderContentService(
-    actsRepository:         ActsRepositoryImpl(),
+    actsRepository: ActsRepositoryImpl(),
     constitutionRepository: ConstitutionRepositoryImpl(),
-    caseLawRepository:      CaseLawRepositoryImpl(),
+    caseLawRepository: CaseLawRepositoryImpl(),
   );
 });
 
@@ -82,12 +85,12 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
   Future<void> loadActSection({
     required String actId,
     required String sectionId,
-    String?         chapterId,
+    String? chapterId,
   }) async {
     _setLoading();
     try {
       final content = await _service.getActSectionContent(
-        actId:     actId,
+        actId: actId,
         sectionId: sectionId,
         chapterId: chapterId,
       );
@@ -109,13 +112,13 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
 
   Future<void> loadConstitutionArticle({
     required String articleId,
-    String?         partId,
+    String? partId,
   }) async {
     _setLoading();
     try {
       final content = await _service.getConstitutionArticleContent(
         articleId: articleId,
-        partId:    partId,
+        partId: partId,
       );
 
       if (content == null) {
@@ -124,7 +127,8 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
       }
 
       await _applyContent(content);
-      debugPrint('[$_tag] Loaded constitution article: ${content.displayLabel}');
+      debugPrint(
+          '[$_tag] Loaded constitution article: ${content.displayLabel}');
     } catch (e) {
       debugPrint('[$_tag] loadConstitutionArticle error: $e');
       _setError('Failed to load article.');
@@ -140,7 +144,10 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
     _setLoading();
     try {
       final previous = await _service.getPreviousContent(current);
-      if (previous == null) { _setError('Previous content not found.'); return; }
+      if (previous == null) {
+        _setError('Previous content not found.');
+        return;
+      }
       await _applyContent(previous);
       debugPrint('[$_tag] Navigated to previous: ${previous.displayLabel}');
     } catch (e) {
@@ -156,7 +163,10 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
     _setLoading();
     try {
       final next = await _service.getNextContent(current);
-      if (next == null) { _setError('Next content not found.'); return; }
+      if (next == null) {
+        _setError('Next content not found.');
+        return;
+      }
       await _applyContent(next);
       debugPrint('[$_tag] Navigated to next: ${next.displayLabel}');
     } catch (e) {
@@ -174,13 +184,13 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
     switch (current.sourceType) {
       case ReaderSourceType.actSection:
         await loadActSection(
-          actId:     current.sourceId ?? '',
+          actId: current.sourceId ?? '',
           sectionId: current.id,
         );
       case ReaderSourceType.constitutionArticle:
         await loadConstitutionArticle(
           articleId: current.id,
-          partId:    current.sourceId,
+          partId: current.sourceId,
         );
     }
   }
@@ -208,24 +218,24 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
     }
 
     state = state.copyWith(
-      isLoading:      false,
+      isLoading: false,
       currentContent: content,
       linkedCaseLaws: caseLaws,
-      errorMessage:   null,
+      errorMessage: null,
     );
   }
 
   void _setLoading() {
     state = state.copyWith(
-      isLoading:      true,
-      errorMessage:   null,
+      isLoading: true,
+      errorMessage: null,
       linkedCaseLaws: const [],
     );
   }
 
   void _setError(String message) {
     state = state.copyWith(
-      isLoading:    false,
+      isLoading: false,
       errorMessage: message,
     );
     debugPrint('[$_tag] Error: $message');
@@ -251,31 +261,26 @@ final currentReaderContentProvider =
 });
 
 /// Convenience: case laws for current content.
-final readerCaseLawsProvider =
-    Provider.autoDispose<List<CaseLaw>>((ref) {
+final readerCaseLawsProvider = Provider.autoDispose<List<CaseLaw>>((ref) {
   return ref.watch(readerProvider).linkedCaseLaws;
 });
 
 /// Convenience: reader loading state.
-final readerLoadingProvider =
-    Provider.autoDispose<bool>((ref) {
+final readerLoadingProvider = Provider.autoDispose<bool>((ref) {
   return ref.watch(readerProvider).isLoading;
 });
 
 /// Convenience: reader error state.
-final readerErrorProvider =
-    Provider.autoDispose<String?>((ref) {
+final readerErrorProvider = Provider.autoDispose<String?>((ref) {
   return ref.watch(readerProvider).errorMessage;
 });
 
 /// True when navigation to next is possible.
-final readerCanGoNextProvider =
-    Provider.autoDispose<bool>((ref) {
+final readerCanGoNextProvider = Provider.autoDispose<bool>((ref) {
   return ref.watch(readerProvider).canGoNext;
 });
 
 /// True when navigation to previous is possible.
-final readerCanGoPrevProvider =
-    Provider.autoDispose<bool>((ref) {
+final readerCanGoPrevProvider = Provider.autoDispose<bool>((ref) {
   return ref.watch(readerProvider).canGoPrev;
 });
